@@ -1,0 +1,162 @@
+<!doctype html> 
+<!-- Jeopardy play created on 6/12/2017 / Rongzuo Xu, "Tim" / version 1-->
+<html>
+<head>
+ <meta http-equiv="x-ua-compatible"  charset="utf-8">
+    <script src="scripts/jquery.min.3.2.1.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	 <script src="scripts/controls.js"></script> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="css/base.css" >
+<head>
+<body>
+
+
+<header class="container">
+<div class= 'row text-center'>
+<h1>The Jeopardy Game</h1>
+</div>
+</header>
+<section class="jumbotron">
+
+<div class= "container text-center" id="questionBoard">
+<div class="row category">
+<div class= "col-md-2 "><p>History</p></div>
+<div class= "col-md-2"><p>ESPN's TOP 10 ALL-TIME ATHLETES</p></div>
+<div class= "col-md-2"><p>EVERYBODY TALKS ABOUT IT...</p></div>
+<div class= "col-md-2"><p>THE COMPANY LINE</p></div>
+<div class= "col-md-2"><p>EPITAPHS & TRIBUTES</p></div>
+<div class= "col-md-2"><p>3-LETTER WORDS</p></div>
+</div>
+<div class="row questions">
+<div class= "col-md-2"><p class="HISTORY" id=history_1>$200</p></div>
+<div class= "col-md-2"><p class="ATHLETES" id=athletes_1>$200</p></div>
+<div class= "col-md-2"><p class="EVERYBODY" id=everybody_1>$200</p></div>
+<div class= "col-md-2"><p class="COMPANY" id=company_1>$200</p></div>
+<div class= "col-md-2"><p class="TRIBUTES" id=tributes_1>$200</p></div>
+<div class= "col-md-2"><p class="WORDS" id=words_1>$200</p></div>
+</div>
+<div class="row questions">
+<div class= "col-md-2"><p class="HISTORY" id=history_2>$400</p></div>
+<div class= "col-md-2"><p class="ATHLETES" id=athletes_2>$400</p></div>
+<div class= "col-md-2"><p class="EVERYBODY" id=everybody_2>$400</p></div>
+<div class= "col-md-2"><p class="COMPANY" id=company_2>$400</p></div>
+<div class= "col-md-2"><p class="TRIBUTES" id=tributes_2>$400</p></div>
+<div class= "col-md-2"><p class="WORDS" id=words_2>$400</p></div>
+</div><div class="row questions">
+<div class= "col-md-2"><p class="HISTORY" id=history_3>$600</p></div>
+<div class= "col-md-2"><p class="ATHLETES" id=athletes_3>$600</p></div>
+<div class= "col-md-2"><p class="EVERYBODY" id=everybody_3>$600</p></div>
+<div class= "col-md-2"><p class="COMPANY" id=company_3>$600</p></div>
+<div class= "col-md-2"><p class="TRIBUTES" id=tributes_3>$600</p></div>
+<div class= "col-md-2"><p class="WORDS" id=words_3>$600</p></div>
+</div><div class="row questions">
+<div class= "col-md-2"><p class="HISTORY" id=history_4>$800</p></div>
+<div class= "col-md-2"><p class="ATHLETES" id=athletes_4>$800</p></div>
+<div class= "col-md-2"><p class="EVERYBODY" id=everybody_4>$800</p></div>
+<div class= "col-md-2"><p class="COMPANY" id=company_4>$800</p></div>
+<div class= "col-md-2"><p class="TRIBUTES" id=tributes_4>$800</p></div>
+<div class= "col-md-2"><p class="WORDS" id=words_4>$800</p></div>
+</div><div class="row questions">
+<div class= "col-md-2"><p class="HISTORY" id=history_5>$1000</p></div>
+<div class= "col-md-2"><p class="ATHLETES" id=athletes_5>$1000</p></div>
+<div class= "col-md-2"><p class="EVERYBODY" id=everybody_5>$1000</p></div>
+<div class= "col-md-2"><p class="COMPANY" id=company_5>$1000</p></div>
+<div class= "col-md-2"><p class="TRIBUTES" id=tributes_5>$1000</p></div>
+<div class= "col-md-2"><p class="WORDS" id=words_5>$1000</p></div>
+</div>
+</div>
+</section>
+
+<section class="container text-center gameStatusBoard">
+<div class= 'row text-center'>
+<h3>Play Game</h3>
+</div>
+
+<div class="row">
+<button id="spinWheel" type="button" class="btn btn-default ">Spin Wheel</button>
+<button id="nextPlayer" type="button" class="btn btn-default ">Next Player</button>
+</div>
+</section>
+
+<section class="container text-center gameStatusBoard">
+<div class= 'row text-center'>
+<h3>Game Status</h3>
+</div>
+<div class="row">
+<div class ="col-md-2 col-md-offset-3">Current Game Round</div>
+<div class ="col-md-2">Current Spin</div>
+<div class ="col-md-2">Current Player</div>
+</div>
+<div class="row">
+
+<div class="col-md-2 col-md-offset-3"><p id="currentRound">1</p></div> 
+<div class="col-md-2"><p id="currentSpin">1</p></div> 
+<div class="col-md-2"><p id="currentPlayer">Player 1</p></div> 
+
+</div>
+</section>
+
+<section class="container text-center scoreboard">
+<div class= 'row text-center'>
+<h3>Score Board</h3>
+</div>
+<div class="row">
+<div class ="col-md-2 col-md-offset-2" id=player1name>Player 1</div>
+<div class ="col-md-2" id=player2name>Player 2</div>
+<div class ="col-md-2" id=player3name>Player 3</div>
+<div class ="col-md-2" id=player4name>Player 4</div>
+</div>
+<div class="row">
+<div class="col-md-2"><p> Scores</p></div> 
+<div class="col-md-2"><p id="p1score">$0</p></div> 
+<div class="col-md-2"><p id="p2score">$0</p></div> 
+<div class="col-md-2"><p id="p3score">$0</p></div> 
+<div class="col-md-2"><p id="p4score">$0</p></div> 
+</div>
+<div class="row">
+<div class="col-md-2"><p> Free Return</p></div> 
+<div class="col-md-2"><p id="p1freeReturn">0</p></div> 
+<div class="col-md-2"><p id="p2freeReturn">0</p></div> 
+<div class="col-md-2"><p id="p3freeReturn">0</p></div> 
+<div class="col-md-2"><p id="p4freeReturn">0</p></div> 
+</div>
+</section>
+
+<div class="container">
+  <!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-info btn-lg hide" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h4 class="modal-title">Modal Header</h4>
+           <p id="timer">Timer will show here</p>  
+        </div>
+        <div class="modal-body">
+          <p id=modalText>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button id="addPoints" type="button" class="btn btn-default hide">Your answers is correct!</button>
+          <button id="noPoints" type="button" class="btn btn-default hide">Good Luck Next Time!</button>
+          <button id="correct-answer" type="button" class="btn btn-default" > Show Correct Answer</button> 
+          <button id="closeBtn" type="button" class="btn btn-default hide">Next</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+<footer class= "container">
+<div class = "row text-center">
+<p>&copy; All rights reserved </br>Project fulfillment for the JHU course "605.407 Foundations of Software Engineering"</br> summer, 2017<P>
+</div>
+</footer>
+</body>
+</html>
