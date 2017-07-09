@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 <!-- Jeopardy play created on 6/12/2017 / Rongzuo Xu, "Tim" / version 1.0-->
 <html>
 <head>
@@ -17,10 +17,13 @@
 </div>
 </header>
 <section class="jumbotron">
-
+<div class="row">
+<div class="col-md-4">
+</div>
+<div class="col-md-8">
 <div class= "container text-center" id="questionBoard">
 <div class="row category">
-<div class= "col-md-2 "><p>History</p></div>
+<div class= "col-md-2"><p>History</p></div>
 <div class= "col-md-2"><p>ESPN's TOP 10 ALL-TIME ATHLETES</p></div>
 <div class= "col-md-2"><p>EVERYBODY TALKS ABOUT IT...</p></div>
 <div class= "col-md-2"><p>THE COMPANY LINE</p></div>
@@ -65,6 +68,8 @@
 <div class= "col-md-2"><p class="WORDS" id=words_5>$1000</p></div>
 </div>
 </div>
+</div>
+</div>
 </section>
 
 <section class="container text-center gameStatusBoard">
@@ -73,6 +78,7 @@
 </div>
 
 <div class="row">
+<button id="addPlayers" type="button" class="btn btn-default ">Add Players</button>
 <button id="spinWheel" type="button" class="btn btn-default ">Spin Wheel</button>
 <button id="nextPlayer" type="button" class="btn btn-default ">Next Player</button>
 </div>
@@ -124,7 +130,7 @@
 
 <div class="container">
   <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-info btn-lg hide" data-toggle="modal" data-target="#myModal">Open Modal</button>
+  <button type="button" class="btn btn-info btn-lg hide" data-toggle="modal" data-target="#myModal">Open Modal 1</button>
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
@@ -147,6 +153,88 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+</div>
+
+<!-- Use this modal to display the available questions for selection -->    
+    <div class="container">
+  <!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal2">Open Modal 2</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h4 class="modal-title">Available Question Categories</h4>
+        </div>
+        <div class="modal-body">
+          <div id="availableQCategories">
+		     
+		  </div>
+        </div>        
+      </div>
+    </div>
+  </div>
+
+</div>
+    
+<!-- Use this modal to input player names -->
+<div class="container">
+  <!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal3">Add players</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal3" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h4 class="modal-title"><h2>enter player names</h2>
+        </div>
+        <div class="modal-body">
+         <div class="container">
+          <form class="form-horizontal" >
+           <div class="form-group">
+              <label class="control-label col-sm-2" for="inputPlayer1Name">Player 1</label>
+              <div class="col-sm-4">          
+                <input type="text" minlength=1 class="form-control" id="inputPlayer1Name" placeholder="Put 1st player's name here">
+              </div>
+         </div>
+		  <div class="form-group">
+              <label class="control-label col-sm-2" for="inputPlayer2Name">Player 2</label>
+              <div class="col-sm-4">          
+                <input type="text" minlength=1 class="form-control" id="inputPlayer2Name" placeholder="Put 2nd player's name here">
+              </div>
+         </div>
+		  <div class="form-group">
+              <label class="control-label col-sm-2" for="inputPlayer3Name">Player 3</label>
+              <div class="col-sm-4">          
+                <input type="text" minlength=1 class="form-control" id="inputPlayer3Name" placeholder="Put 3rd players name here">
+              </div>
+         </div>
+		  <div class="form-group">
+              <label class="control-label col-sm-2" for="inputPlayer4Name">Player 4</label>
+              <div class="col-sm-4">          
+                <input type="text" minlength=1 class="form-control" id="inputPlayer4Name" placeholder="Put 4th players name here">
+              </div>
+         </div>
+		 
+           <div class="form-group">        
+             <div class="col-sm-offset-3 col-sm-4">
+             <button id="inputPlayers" type="button" class="btn btn-default">Submit</button>
+             </div>
+           </div>
+        </form>
+       </div>
+
+        </div>        
+      </div>
     </div>
   </div>
 

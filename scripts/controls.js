@@ -8,13 +8,85 @@ var availableCategories = {}; // to list category of questions that have unanswe
 var spinRound; // to record the round of the wheels being spinned
 var currentPlayer; // to record the current player
 var player1, player2, player3, player4; // to record 4 players
-
+var numOfPlayers;
+var players = [];
 
 // start the game
 $(document).ready(function(){
-   playGame();
+	  numOfPlayer = prompt("Please enter number of players (up to 4)");
+	  addPlayers(numOfPlayer);
+	 // player1 = new Player("Tom", "player1");
+	  // player2 = new Player("Mary", "player2");
+	  // player3 = new Player("Jack", "player3");
+	  // player4 = new Player("Alice", "player1");
+	 // player1.name = prompt("Please enter the 1st player's name");
+	  // player2.name = prompt("Please enter the 2nd player's name");
+	   // player3.name = prompt("Please enter the 3rd player's name");
+		// player4.name = prompt("Please enter the 4th player's name");
+	  addPlayerNames(playGame);
+	 // addPlayerNames();
+	 //  playGame();
    
 });
+
+function addPlayers(numOfPlayers, callback){
+	for(var i = 0; i <= numOfPlayers; i++){
+		players.push(new Player("player" + i, "player" + i));
+		console.log("new player is:" + players[i].name );
+	 	console.log("players length: " + players.length);
+	}
+	
+	if (callback && typeof(callback) === "function") { 
+        callback(); 
+    }  
+}
+
+function addPlayerNames(callback){
+		$('#myModal3').modal('show');
+	/*	$('#inputPlayer1Name').focusout(function(){
+			players[1].name = $(this).val();
+			
+			console.log("new player 1 name input is:" + $(this).val()); 
+			console.log("new player1 is: " + player1);
+		 });
+		 $('#inputPlayer2Name').focusout(function(){
+			players[2].name = $(this).val();
+			
+			console.log("new player 2 name input is:" + $(this).val()); 
+		 });
+		 $('#inputPlayer3Name').focusout(function(){
+			players[3].name = $(this).val();
+			
+			console.log("new player 3 name input is:" + $(this).val()); 
+		 });
+		 $('#inputPlayer1Name').focusout(function(){
+			players[4].name = $(this).val();
+			
+			console.log("new player 1 name input is:" + $(this).val()); 
+		 });
+		*/
+		
+		$('#inputPlayers').click(function(){
+			players[1].name = $('#inputPlayer1Name').val();
+			players[2].name = $('#inputPlayer2Name').val();
+			players[3].name = $('#inputPlayer3Name').val();
+			players[4].name = $('#inputPlayer4Name').val();
+					player1 = players[1];
+		            player2 = players[2];
+		            player3 = players[3];
+		            player4 = players[4]; 
+			$('#myModal3').modal('hide');
+		console.log("player1 is: " + player1.name);
+		console.log("line 71 executed");	
+		//	playGame();
+			if (callback && typeof(callback) === "function") { 
+				callback();
+				}
+		});
+
+		
+   
+}
 
 // Load the jeopardy question to Modal
 function loadContent(question){
@@ -159,18 +231,16 @@ function Player(name, id) {
 
 function initRoundOne(){
           // set players 
-         player1 = new Player("Tom", "player1");
-         player2 = new Player("Mary", "player2");
-         player3 = new Player("Jack", "player3");
-         player4 = new Player("Alice", "player4");		 
+       //  player1 = new Player("Tom", "player1");
+       //  player2 = new Player("Mary", "player2");
+       //  player3 = new Player("Jack", "player3");
+       //  player4 = new Player("Alice", "player4");		 
          
 		 // displayers name
         $('#player1name').text(player1.name);
         $('#player2name').text(player2.name);
         $('#player3name').text(player3.name);
         $('#player4name').text(player4.name);
-		
-
 		
          // set game status  
          spinRound = 1;
@@ -275,7 +345,7 @@ function fetchQuestion(questionCategory){
     var displayid;
     var pos = availableCategories[questionCategory] + 1;
     displayid =  "#" + questionCategory.toLowerCase() + "_" + pos;
-    console.log("execute line 255");
+    console.log("execute line 276");
     console.log("the displayid is " + displayid);
     $(displayid).addClass('hide');
     var question;
@@ -294,6 +364,45 @@ if(availableCategories[questionCategory] < source[questionCategory].length -1){
 }
 
 
+// use this function to display ans fetch questions
+function displayFetchAnswerQuestion(){
+	
+	var btnHtml = "";
+	$('#availableQCategories').html(btnHtml); // to clear the content in the Modal2.
+	
+    for(var key in availableCategories){
+		btnHtml += '<button id=' + 'question_' + key + ' type="button" class="btn btn-default qCategoryBtn">' + key + '</button>';
+	}
+	
+	$('#availableQCategories').html(btnHtml); // load in new content;
+	$('#myModal2').modal('show');
+	
+    selectQuestion();	
+	
+	//if ($('.qCategoryBtn').clicked == true){
+	//	var questionCategory;
+	//	questionCategory = $(this).attr('id').split("_")[1];
+	 //   $('#myModal2').modal('hide');
+	//	return fetchQuestion(questionCategory);		
+		
+	//}else {
+	 //  displayFetchQuestion();
+	//}
+	
+}
+
+//Use the following function to select a question
+
+function selectQuestion(){
+	$('.qCategoryBtn').click(function(){
+	   var questionCategory;
+	    questionCategory = $(this).attr('id').split("_")[1];
+		console.log('execute line 328');
+		console.log("question category is: " + questionCategory);
+	    $('#myModal2').modal('hide');
+	   answerQuestion(fetchQuestion(questionCategory));	
+	});	
+}
 // use this function to invoke the function answer process.
 
     // ---------------- This function to be modified 
@@ -417,7 +526,15 @@ function spinWheel(){
 		           // create a model and list the question caterogies in availableCategories
 				// if a question is selected, run the answerQuestion(question) function
 				alert("player's choice!");
-				console.log("Player's choice!");
+				console.log(availableCategories);
+				
+				if(!$.isEmptyObject(availableCategories)){
+					displayFetchAnswerQuestion();
+					 
+				} else {
+					alert('All questions are answered!');
+				}
+				
 				spinRound++;
 				updateGameboard();
 			//	checkStatus();
@@ -428,6 +545,14 @@ function spinWheel(){
                 // if a question is selected, run the answerQuestion(question) function
 				alert("Opponent's choice!");
 				console.log("Opponent's's choice!");
+				
+				if(!$.isEmptyObject(availableCategories)){
+					var question = displayFetchAnswerQuestion();
+					  
+				} else {
+					alert('All questions are answered!');
+				}
+				
 				spinRound++;
 				updateGameboard();
 				checkStatus();
@@ -443,7 +568,6 @@ function spinWheel(){
 						  spinRound++;
                           $('#currentSpin').text(spinRound);
                           updateGameboard();						  
-						  alert("click spin wheel button to play one more round"); 
 						 $('#spinWheel').off().unbind().click(function(){
 							spinWheel(); 
 						 }); 
