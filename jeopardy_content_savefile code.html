@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Question Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="scripts/fileoperation.js"></script>
+<style>
+body {
+    background-color: linen;
+}
+ .titletable {border: 0px; background: #FFCC66; width: 95%;}
+
+h1 {
+    color: maroon;
+    margin-left: 40px;
+} 
+h2 {
+    background-color: lightblue;
+} 
+.questionRows {
+    padding: 5px;
+}
+</style>  
+</head>
+<body>
+ <div class="jumbotron text-center">
+  <h1>Question Dashboard</h1>
+  <p>Build up your own question reservoir here</p> 
+</div>
+
+<h2 onclick="toggleQuestionBoard(this)">&nbsp;&and;&nbsp;Round One questions</h2>
+<div class=container  id=questionRoundOne>
+<div class="row titletable"  name="category1">
+<div class="col-md-4"><h4 onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_1 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" class=questionRows name="category1_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="row titletable"  name="category2">
+<div class="col-md-4"><h4  onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_2 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" name="category2_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="row titletable"  name="category3">
+<div class="col-md-4"><h4  onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_3 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" name="category3_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="row titletable"  name="category4">
+<div class="col-md-4"><h4  onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_4 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" name="category4_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="row titletable"  name="category5">
+<div class="col-md-4"><h4  onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_5 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" name="category5_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="row titletable"  name="category6">
+<div class="col-md-4"><h4  onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_6 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" name="category6_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+</div>
+<h2 onclick="toggleQuestionBoard(this)">&nbsp;&and;&nbsp;Round Two questions</h2>
+<div class=container  id=questionRoundTwo>
+<div class="row titletable"  name="category1">
+<div class="col-md-4"><h4 onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_1 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" class=questionRows name="category1_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="row titletable"  name="category2">
+<div class="col-md-4"><h4  onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_2 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" name="category2_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="row titletable"  name="category3">
+<div class="col-md-4"><h4  onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_3 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" name="category3_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="row titletable"  name="category4">
+<div class="col-md-4"><h4  onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_4 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" name="category4_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="row titletable"  name="category5">
+<div class="col-md-4"><h4  onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_5 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" name="category5_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+<br>
+<br>
+<div class="row titletable"  name="category6">
+<div class="col-md-4"><h4  onclick="toggleQuestionCategory(this)">&nbsp;&and;&nbsp;Question Category_6 </h4></div> 
+<div class="col-md-2"><h4>Category Name</h4></div>
+<div class="col-md-3"> <input type="text" class="form-control" name="category_name" placeholder="input category name here"></div>
+</div>
+<br>
+<div class="row" name="category6_questions">
+<div class=row>
+    <div class="col-md-3 col-md-offset-3">Question</div>
+    <div class="col-md-3">Answer</div>
+    <div class="col-md-3">Value</div>
+</div>
+<div class=row name=questionOne>
+    <div class="col-md-2">Question One</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionTwo>
+    <div class="col-md-2">Question Two</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionThree>
+    <div class="col-md-2">Question Three</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFour>
+    <div class="col-md-2">Question Four</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+<div class=row name=questionFive>
+    <div class="col-md-2">Question Five</div>
+    <div class="col-md-3"><input type="text" class="form-control" name=question placeholder="question"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=answer placeholder="answer"></div>
+    <div class="col-md-3"><input type="text" class="form-control" name=value placeholder="value"></div>
+</div>
+</div>
+</div>
+
+<table>  
+    <tr>
+        <td>Filename to Save As:&nbsp;&nbsp;</td>
+        <td><input id="inputFileNameToSaveAs"></input></td>
+        <td><button onclick="saveTextAsFile()">Save Text to File </button></td>
+    </tr>
+    <tr>
+        <td>Select a File to Load:&nbsp;&nbsp;</td>
+        <td><input type="file" id="fileToLoad"></td>
+        <td><button onclick="loadFileAsText()">Load Selected File</button><td>
+    </tr>
+</table>
+</body>
+</html>

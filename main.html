@@ -5,128 +5,147 @@
  <meta http-equiv="x-ua-compatible"  charset="utf-8">
     <script src="scripts/jquery.min.3.2.1.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	 <script type="text/javascript" src="scripts/Winwheel.js"></script>
 	 <script src="scripts/controls.js"></script>
+	 <script src="scripts/fileoperation.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <link rel="stylesheet" type="text/css" href="css/base.css" >
+	  <link rel="stylesheet" href="css/winwheel.css" type="text/css" />
+        
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
 <head>
 <body>
 
 <header class="container">
 <div class= 'row text-center'>
 <h1>The Jeopardy Game</h1>
+<h2>The theme of the game will be displayed here</h2>
 </div>
 </header>
 <section class="jumbotron">
 <div class="row">
-<div class="col-md-4">
+<!-- This part displays the spin wheel -->
+<div class="col-md-4 col-md-offset-1">
+<table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+			    <td width="438" height="438" class="the_wheel" align="center" valign="center">
+                    <canvas id="canvas" width="434" height="434">
+                        <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                    </canvas>
+                </td>
+			</tr>
+            <tr>
+                <td>
+                    <div class="power_controls" align="center">
+                        <br />
+                        <br />
+                        <br />
+					<div class=row>	
+                        <div class = "col-md-3 col-md-offset-2"><img id="spin_button" src="spin_off.png" alt="Spin" onClick="startSpin();" /></div>
+                        <div class = "col-md-4 col-md-offset-1"><img id="nextPlayer" src="resource/next_player.png" alt="Next Player"  /></div>						
+						</div>
+                        <br /><br />
+                        &nbsp;<a href="#" onClick="resetWheel(); return false;">reset</a>
+                    </div>
+                </td>   
+            </tr>
+        </table>
 </div>
-<div class="col-md-8">
+
+<!-- THis part displays unanswerred questions -->
+<div class="col-md-7">
 <div class= "container text-center" id="questionBoard">
-<div class="row category">
-<div class= "col-md-2"><p>History</p></div>
-<div class= "col-md-2"><p>ESPN's TOP 10 ALL-TIME ATHLETES</p></div>
-<div class= "col-md-2"><p>EVERYBODY TALKS ABOUT IT...</p></div>
-<div class= "col-md-2"><p>THE COMPANY LINE</p></div>
-<div class= "col-md-2"><p>EPITAPHS & TRIBUTES</p></div>
-<div class= "col-md-2"><p>3-LETTER WORDS</p></div>
-</div>
-<div class="row questions">
-<div class= "col-md-2"><p class="HISTORY" id=history_1>$200</p></div>
-<div class= "col-md-2"><p class="ATHLETES" id=athletes_1>$200</p></div>
-<div class= "col-md-2"><p class="EVERYBODY" id=everybody_1>$200</p></div>
-<div class= "col-md-2"><p class="COMPANY" id=company_1>$200</p></div>
-<div class= "col-md-2"><p class="TRIBUTES" id=tributes_1>$200</p></div>
-<div class= "col-md-2"><p class="WORDS" id=words_1>$200</p></div>
-</div>
-<div class="row questions">
-<div class= "col-md-2"><p class="HISTORY" id=history_2>$400</p></div>
-<div class= "col-md-2"><p class="ATHLETES" id=athletes_2>$400</p></div>
-<div class= "col-md-2"><p class="EVERYBODY" id=everybody_2>$400</p></div>
-<div class= "col-md-2"><p class="COMPANY" id=company_2>$400</p></div>
-<div class= "col-md-2"><p class="TRIBUTES" id=tributes_2>$400</p></div>
-<div class= "col-md-2"><p class="WORDS" id=words_2>$400</p></div>
-</div><div class="row questions">
-<div class= "col-md-2"><p class="HISTORY" id=history_3>$600</p></div>
-<div class= "col-md-2"><p class="ATHLETES" id=athletes_3>$600</p></div>
-<div class= "col-md-2"><p class="EVERYBODY" id=everybody_3>$600</p></div>
-<div class= "col-md-2"><p class="COMPANY" id=company_3>$600</p></div>
-<div class= "col-md-2"><p class="TRIBUTES" id=tributes_3>$600</p></div>
-<div class= "col-md-2"><p class="WORDS" id=words_3>$600</p></div>
-</div><div class="row questions">
-<div class= "col-md-2"><p class="HISTORY" id=history_4>$800</p></div>
-<div class= "col-md-2"><p class="ATHLETES" id=athletes_4>$800</p></div>
-<div class= "col-md-2"><p class="EVERYBODY" id=everybody_4>$800</p></div>
-<div class= "col-md-2"><p class="COMPANY" id=company_4>$800</p></div>
-<div class= "col-md-2"><p class="TRIBUTES" id=tributes_4>$800</p></div>
-<div class= "col-md-2"><p class="WORDS" id=words_4>$800</p></div>
-</div><div class="row questions">
-<div class= "col-md-2"><p class="HISTORY" id=history_5>$1000</p></div>
-<div class= "col-md-2"><p class="ATHLETES" id=athletes_5>$1000</p></div>
-<div class= "col-md-2"><p class="EVERYBODY" id=everybody_5>$1000</p></div>
-<div class= "col-md-2"><p class="COMPANY" id=company_5>$1000</p></div>
-<div class= "col-md-2"><p class="TRIBUTES" id=tributes_5>$1000</p></div>
-<div class= "col-md-2"><p class="WORDS" id=words_5>$1000</p></div>
+<div class= "col-md-2" id=category1_questions>
+<p>category1</p>
+<div class="questions">
+<div ><p name=question1>$200</p></div>
+<div ><p name=question2>$400</p></div>
+<div ><p name=question3>$600</p></div>
+<div ><p name=question4>$800</p></div>
+<div ><p name=question5>$1000</p></div>
 </div>
 </div>
+<div class= "col-md-2" id=category2_questions>
+<p>category2</p>
+<div class="questions">
+<div ><p name=question1>$200</p></div>
+<div ><p name=question2>$400</p></div>
+<div ><p name=question3>$600</p></div>
+<div ><p name=question4>$800</p></div>
+<div ><p name=question5>$1000</p></div>
 </div>
 </div>
-</section>
+<div class= "col-md-2" id=category3_questions>
+<p>category3</p>
+<div class="questions">
+<div ><p name=question1>$200</p></div>
+<div ><p name=question2>$400</p></div>
+<div ><p name=question3>$600</p></div>
+<div ><p name=question4>$800</p></div>
+<div ><p name=question5>$1000</p></div>
+</div>
+</div>
+<div class= "col-md-2" id=category4_questions>
+<p>category4</p>
+<div class="questions">
+<div ><p name=question1>$200</p></div>
+<div ><p name=question2>$400</p></div>
+<div ><p name=question3>$600</p></div>
+<div ><p name=question4>$800</p></div>
+<div ><p name=question5>$1000</p></div>
+</div>
+</div>
+<div class= "col-md-2" id=category5_questions>
+<p>category5</p>
+<div class="questions">
+<div ><p name=question1>$200</p></div>
+<div ><p name=question2>$400</p></div>
+<div ><p name=question3>$600</p></div>
+<div ><p name=question4>$800</p></div>
+<div ><p name=question5>$1000</p></div>
+</div>
+</div>
+<div class= "col-md-2" id=category6_questions>
+<p>category6</p>
+<div class="questions">
+<div ><p name=question1>$200</p></div>
+<div ><p name=question2>$400</p></div>
+<div ><p name=question3>$$600</p></div>
+<div ><p name=question4>$800</p></div>
+<div ><p name=question5>$1000</p></div>
+</div>
+</div>
+</div>
 
-<section class="container text-center gameStatusBoard">
-<div class= 'row text-center'>
-<h3>Play Game</h3>
+<!-- This part displays players scores -->
+<div class="container text-center scoreboard">
+
+<div class="row plyerScores" id=playersBoard>
+    <div class ="col-md-2 col-md-offset-1">
+     <div><h6> &nbsp; </h6></div>
+	 <div>Scores</div>
+	 <div>Free Turns</div>
+    </div>   
 </div>
+</div>
+<!--This part dispalys game status-->
+<div class="container text-center gameStatusBoard">
 
 <div class="row">
-<button id="addPlayers" type="button" class="btn btn-default ">Add Players</button>
-<button id="spinWheel" type="button" class="btn btn-default ">Spin Wheel</button>
-<button id="nextPlayer" type="button" class="btn btn-default ">Next Player</button>
-</div>
-</section>
-
-<section class="container text-center gameStatusBoard">
-<div class= 'row text-center'>
-<h3>Game Status</h3>
-</div>
-<div class="row">
-<div class ="col-md-2 col-md-offset-3">Current Game Round</div>
-<div class ="col-md-2">Current Spin</div>
-<div class ="col-md-2">Current Player</div>
+<div class ="col-md-4 col-md-offset-1">Current Game Round</div>
+<div class ="col-md-3">Current Spin</div>
+<div class ="col-md-3">Current Player</div>
 </div>
 <div class="row">
 
-<div class="col-md-2 col-md-offset-3"><p id="currentRound">1</p></div>
-<div class="col-md-2"><p id="currentSpin">1</p></div>
-<div class="col-md-2"><p id="currentPlayer">Player 1</p></div>
+<div class="col-md-4 col-md-offset-1"><p id="currentRound">1</p></div>
+<div class="col-md-3"><p id="currentSpin">1</p></div>
+<div class="col-md-3"><p id="currentPlayer">Player 1</p></div>
 
 </div>
-</section>
+</div>
+</div>
 
-<section class="container text-center scoreboard">
-<div class= 'row text-center'>
-<h3>Score Board</h3>
-</div>
-<div class="row">
-<div class ="col-md-2 col-md-offset-2" id=player1name>Player 1</div>
-<div class ="col-md-2" id=player2name>Player 2</div>
-<div class ="col-md-2" id=player3name>Player 3</div>
-<div class ="col-md-2" id=player4name>Player 4</div>
-</div>
-<div class="row">
-<div class="col-md-2"><p> Scores</p></div>
-<div class="col-md-2"><p id="p1score">$0</p></div>
-<div class="col-md-2"><p id="p2score">$0</p></div>
-<div class="col-md-2"><p id="p3score">$0</p></div>
-<div class="col-md-2"><p id="p4score">$0</p></div>
-</div>
-<div class="row">
-<div class="col-md-2"><p> Free Return</p></div>
-<div class="col-md-2"><p id="p1freeReturn">0</p></div>
-<div class="col-md-2"><p id="p2freeReturn">0</p></div>
-<div class="col-md-2"><p id="p3freeReturn">0</p></div>
-<div class="col-md-2"><p id="p4freeReturn">0</p></div>
-</div>
-</section>
 
 <div class="container">
   <!-- Trigger the modal with a button -->
@@ -161,7 +180,7 @@
 <!-- Use this modal to display the available questions for selection -->    
     <div class="container">
   <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal2">Open Modal 2</button>
+  <button type="button" class="btn btn-info btn-lg hide" data-toggle="modal" data-target="#myModal2">Open Modal 2</button>
 
   <!-- Modal -->
   <div class="modal fade" id="myModal2" role="dialog">
@@ -186,7 +205,7 @@
 <!-- Use this modal to input player names -->
 <div class="container">
   <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal3">Add players</button>
+  <button type="button" class="btn btn-info btn-lg hide" data-toggle="modal" data-target="#myModal3">Add players</button>
 
   <!-- Modal -->
   <div class="modal fade" id="myModal3" role="dialog">
@@ -199,32 +218,7 @@
         </div>
         <div class="modal-body">
          <div class="container">
-          <form class="form-horizontal" >
-           <div class="form-group">
-              <label class="control-label col-sm-2" for="inputPlayer1Name">Player 1</label>
-              <div class="col-sm-4">          
-                <input type="text" minlength=1 class="form-control" id="inputPlayer1Name" placeholder="Put 1st player's name here">
-              </div>
-         </div>
-		  <div class="form-group">
-              <label class="control-label col-sm-2" for="inputPlayer2Name">Player 2</label>
-              <div class="col-sm-4">          
-                <input type="text" minlength=1 class="form-control" id="inputPlayer2Name" placeholder="Put 2nd player's name here">
-              </div>
-         </div>
-		  <div class="form-group">
-              <label class="control-label col-sm-2" for="inputPlayer3Name">Player 3</label>
-              <div class="col-sm-4">          
-                <input type="text" minlength=1 class="form-control" id="inputPlayer3Name" placeholder="Put 3rd players name here">
-              </div>
-         </div>
-		  <div class="form-group">
-              <label class="control-label col-sm-2" for="inputPlayer4Name">Player 4</label>
-              <div class="col-sm-4">          
-                <input type="text" minlength=1 class="form-control" id="inputPlayer4Name" placeholder="Put 4th players name here">
-              </div>
-         </div>
-		 
+          <form class="form-horizontal" id=modal3PlayerInpput > 
            <div class="form-group">        
              <div class="col-sm-offset-3 col-sm-4">
              <button id="inputPlayers" type="button" class="btn btn-default">Submit</button>
@@ -240,10 +234,197 @@
 
 </div>
 
+<div class="container">
+  <!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-info btn-lg hide" data-toggle="modal" data-target="#myModal4">Open Modal 4</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal4" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h4 class="modal-title">Start Menu</h4>
+        </div>
+        <div class="modal-body">
+          <ul>
+		  <li>Click the "Prepare/Edit" button to the question preparation webpage</li>
+		  <li>Click the "Load" button to load in a prepared question file into the gameboard</li>
+		  <li>Click the "Free Trial" button to run the gameboard with a sample question set</li>
+		  </ul>
+        </div>
+        <div class="modal-footer">
+          <button id="toEditQuestionFile" type="button" class="btn btn-default">Prepare/Edit </button>
+          <button id="loadAquestionFile" type="button" class="btn btn-default">Load</button>
+          <button id="freeTrial" type="button" class="btn btn-default" > Free Trial</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="container hide">
+    <tr>
+	<td colspan=3><button  onclick="openQuestionEditor()">Open Jeopardy Question Editor</button></td>
+	</tr>
+</div>
+<div class="container hide">
+	<tr>
+        <td>Select a File to Load:</td>
+        <td><input type="file" id="fileToLoadIn"></td>
+        <td><button onclick="loadFileIntoGame(startGame)">Load Selected File into Game</button><td>
+    </tr>
+</div>
 <footer class= "container">
 <div class = "row text-center">
-<p>&copy; All rights reserved </br>Project fulfillment for the JHU course "605.407 Foundations of Software Engineering"</br> summer, 2017<P>
+<p>Team Bravo&trade; All rights reserved&copy;</br>605.407 Foundations of Software Engineering</br>JHU-EP summer,2017<P>
 </div>
 </footer>
+<script>
+// Below are the codes to set up the spin wheel
+
+            // Create new wheel object specifying the parameters at creation time.
+            var theWheel = new Winwheel({
+                'numSegments'   : 12,   // Specify number of segments.
+                'outerRadius'   : 212,  // Set radius to so wheel fits the background.
+                'innerRadius'   : 120,  // Set inner radius to make wheel hollow.
+                'textFontSize'  : 14,   // Set font size accordingly.
+                'textMargin'    : 0,    // Take out default margin.
+                'segments'      :       // Define segments including colour and text.
+                [
+                   {'fillStyle' : '#eae56f', 'text' : 'Category 1'},
+                   {'fillStyle' : '#89f26e', 'text' : 'Category 2'},
+                   {'fillStyle' : '#7de6ef', 'text' : 'Category 3'},
+                   {'fillStyle' : '#e7706f', 'text' : 'Category 4'},
+                   {'fillStyle' : '#eae56f', 'text' : 'Category 5'},
+                   {'fillStyle' : '#89f26e', 'text' : 'Category 6'},
+                   {'fillStyle' : '#7de6ef', 'text' : 'Lose Turn'},
+                   {'fillStyle' : '#e7706f', 'text' : 'Free Turn'},
+                   {'fillStyle' : '#eae56f', 'text' : 'Bankrupt'},
+                   {'fillStyle' : '#89f26e', 'text' : 'P Choice'},
+                   {'fillStyle' : '#7de6ef', 'text' : 'O Choice'},
+                   {'fillStyle' : '#e7706f', 'text' : 'Spin Again'},
+                ],
+                'animation' :           // Define spin to stop animation.
+                {
+                    'type'     : 'spinToStop',
+                    'duration' : 3,
+                    'spins'    : 5,
+                    'callbackFinished' : 'alertPrize()'
+                }
+            });
+            
+            // Vars used by the code in this page to do power controls.
+            var wheelPower    = Math.floor((Math.random() * 3)) + 1;
+            var wheelSpinning = false;
+            
+            // -------------------------------------------------------
+            // Function to handle the onClick on the power buttons.
+            // -------------------------------------------------------
+            function powerSelected(powerLevel)
+            {
+                // Ensure that power can't be changed while wheel is spinning.
+                if (wheelSpinning == false)
+                {
+                    // Reset all to grey incase this is not the first time the user has selected the power.
+                    document.getElementById('pw1').className = "";
+                    document.getElementById('pw2').className = "";
+                    document.getElementById('pw3').className = "";
+                    
+                    // Now light up all cells below-and-including the one selected by changing the class.
+                    if (powerLevel >= 1)
+                    {
+                        document.getElementById('pw1').className = "pw1";
+                    }
+                        
+                    if (powerLevel >= 2)
+                    {
+                        document.getElementById('pw2').className = "pw2";
+                    }
+                        
+                    if (powerLevel >= 3)
+                    {
+                        document.getElementById('pw3').className = "pw3";
+                    }
+                    
+                    // Set wheelPower var used when spin button is clicked.
+                    wheelPower = powerLevel;
+                    
+                    // Light up the spin button by changing it's source image and adding a clickable class to it.
+                    document.getElementById('spin_button').src = "spin_on.png";
+                    document.getElementById('spin_button').className = "clickable";
+                }
+            }
+            
+            // -------------------------------------------------------
+            // Click handler for spin button.
+            // -------------------------------------------------------
+            function startSpin()
+            {
+                // Ensure that spinning can't be clicked again while already running.
+                if (wheelSpinning == false)
+                {
+                    // Based on the power level selected adjust the number of spins for the wheel, the more times is has
+                    // to rotate with the duration of the animation the quicker the wheel spins.
+                    if (wheelPower == 1)
+                    {
+                        theWheel.animation.spins = 3;
+                    }
+                    else if (wheelPower == 2)
+                    {
+                        theWheel.animation.spins = 8;
+                    }
+                    else if (wheelPower == 3)
+                    {
+                        theWheel.animation.spins = 15;
+                    }
+                    
+                    // Disable the spin button so can't click again while wheel is spinning.
+                    document.getElementById('spin_button').src       = "spin_off.png";
+                    document.getElementById('spin_button').className = "";
+                    
+                    // Begin the spin animation by calling startAnimation on the wheel object.
+                    theWheel.startAnimation();
+                    
+                    // Set to true so that power can't be changed and spin button re-enabled during
+                    // the current animation. The user will have to reset before spinning again.
+                    wheelSpinning = true;
+                }
+            }
+            
+            // -------------------------------------------------------
+            // Function for reset button.
+            // -------------------------------------------------------
+            function resetWheel()
+            {
+                theWheel.stopAnimation(false);  // Stop the animation, false as param so does not call callback function.
+                theWheel.rotationAngle = 0;     // Re-set the wheel angle to 0 degrees.
+                theWheel.draw();                // Call draw to render changes to the wheel.
+                
+            //    document.getElementById('pw1').className = "";  // Remove all colours from the power level indicators.
+             //   document.getElementById('pw2').className = "";
+              //  document.getElementById('pw3').className = "";
+                
+                wheelSpinning = false;          // Reset to false to power buttons and spin can be clicked again.
+            }
+            
+            // -------------------------------------------------------
+            // Called when the spin animation has finished by the callback feature of the wheel because I specified callback in the parameters.
+            // -------------------------------------------------------
+            function alertPrize()
+            {
+                // Get the segment indicated by the pointer on the wheel background which is at 0 degrees.
+                var winningSegment = theWheel.getIndicatedSegment();
+                
+                // Do basic alert of the segment text. You would probably want to do something more interesting with this information.
+              //  alert("Your selection is " + winningSegment.text);
+				
+				playRound(winningSegment.text);
+				
+            }
+</script>
+
 </body>
 </html>
