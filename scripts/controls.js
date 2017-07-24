@@ -4,22 +4,122 @@ var category;  // category of the problem
 var intervalId; // will be used to record time
 var gameRound; // to record round of games
 var allCategories = [];
+var oJeopardy_questions;
 var availableCategories = {}; // to list category of questions that have unanswered question.
 var spinRound; // to record the round of the wheels being spinned
 var currentPlayer; // to record the current player
-var player1, player2, player3, player4; // to record 4 players
-
+var numOfPlayers;
+var players = [];
 
 // start the game
 $(document).ready(function(){
-   playGame();
-   
+	$("#myModal4").modal('show'); 
+    
+	
+	$('#toEditQuestionFile').click(function(){
+		$('#myModal4').modal('hide');
+		openQuestionEditor();
+	});
+	
+	
+	
+	$('#loadAquestionFile').click(function(){
+		configModal4();
+	});
+	
+	
+	$('#freeTrial').click(function(){
+		$('#myModal4').modal('hide');
+		oJeopardy_questions = sampleQuestions;
+		startGame();	
+	});
 });
+
+function configModal4(){
+	$("#myModal4").find(".modal-title").text("Upload a question file");
+	
+	$("#myModal4").find(".modal-body").html(
+	   '<p>Select a File to Load: <br/><input type="file" id="fileToLoadIn"></p>');
+	
+    $("#myModal4").find(".modal-footer").html('<button id="fileToLoadInBtn">Load Selected File into Game</button>');
+	
+	$('#fileToLoadInBtn').click(function(){
+		$('#myModal4').modal('hide');
+		loadFileIntoGame(startGame);
+	});	
+}
+
+
+function startGame(){
+	 gameRound = 1;
+	 displayQuestions();
+	enterNumOfPlayers(function(){
+		 createPlayers(function(){
+			 addPlayerNames(playGame);
+		 });
+	 });
+}
+
+function enterNumOfPlayers(callback){
+	 numOfPlayers = prompt("Please enter number of players (1 to 4)");
+	 
+	  if ( isNaN(numOfPlayers) || Number(numOfPlayers) < 0 || Number(numOfPlayers) > 4){
+		  alert("You entered a wrong number");
+		  enterNumOfPlayers();
+	  }
+		  if (callback && typeof(callback) === "function") {
+			  callback();
+			  } 
+}
+	 
+function createPlayers(callback){
+	console.log("line 55 executed");
+	for(var i = 0; i < numOfPlayers; i++){
+		players.push(new Player("player" + i, "player" + i));
+	}
+		 console.log("players length: " + players.length);
+	if (callback && typeof(callback) === "function") { 
+        callback(); 
+    }  
+}
+
+function configureModal3(){
+	for(var i = players.length-1; i >=0; i--){
+		var j = i + 1;
+		$('#modal3PlayerInpput').prepend('<div class="form-group"><label class="control-label col-sm-2" for="inputPlayer' + j + 'Name">Player' + j + 
+		'</label><div class="col-sm-4"><input type="text" minlength=1 class="form-control" id="inputPlayer' + j + 'Name" placeholder="Put player\'s name here"></div></div>');	
+	}		
+}
+
+function addPlayerNames(callback){
+	    configureModal3();
+		$('#myModal3').modal('show');
+				console.log("line 76 executed");
+		$('#inputPlayers').click(function(){
+			for(var item in players){
+				var j = Number(item)+1;
+				players[item].name =  $('#inputPlayer' + j + 'Name').val();
+                console.log("player name is: " + players[item].name);
+			}
+			$('#myModal3').modal('hide');
+		
+		// display players name
+		for(var item in players){
+             $('#playersBoard').append('<div class ="col-md-2" id=player' + item + 'board><div name = "playername"><h4>' +
+			 players[item].name + '</h4></div><div name = "playerscore">$0</div><div name= "playerFreeTurns">0</div></div>');
+		}
+		
+		if (callback && typeof(callback) === "function") { 
+				callback();
+				}
+	});		
+}
 
 // Load the jeopardy question to Modal
 function loadContent(question){
   $(".modal-title").text("Jeopardy Question");
   $("#modalText").text("");
+  $('#timer').text(""); 
   $("#modalText").text(question["question"]);
 }
 
@@ -115,7 +215,7 @@ function clearModal(){
 
 // Activate the 30-second back counting timer   
 function setTimer(question){
-var seconds = 5;
+var seconds = 15;
  intervalId = setInterval(function() {
     $('#timer').text(seconds + "s left...");  
      seconds = seconds - 1;
@@ -158,26 +258,13 @@ function Player(name, id) {
 }
 
 function initRoundOne(){
-          // set players 
-         player1 = new Player("Tom", "player1");
-         player2 = new Player("Mary", "player2");
-         player3 = new Player("Jack", "player3");
-         player4 = new Player("Alice", "player4");		 
-         
-		 // displayers name
-        $('#player1name').text(player1.name);
-        $('#player2name').text(player2.name);
-        $('#player3name').text(player3.name);
-        $('#player4name').text(player4.name);
-		
-
-		
+		          
          // set game status  
          spinRound = 1;
          gameRound = 1;
          
           // set available question categories 
-		 allCategories = Object.keys(oJeopardy_round1);  
+		 allCategories = Object.keys(oJeopardy_questions["oJeopardy_round1"]);  
 		 
 		 for(var item in allCategories){
 		//	 console.log("item is: " + allCategories[item]);
@@ -185,14 +272,13 @@ function initRoundOne(){
 		 }
 
           // set current player
-           currentPlayer = player1;  
+           currentPlayer = players[0];  
 
 		// initiate question dashboard
-		
 		for(var i in allCategories){
 			for(var j = 1; j <= 5; j++){
 				var displayid =  "#" + allCategories[i].toLowerCase() + "_" + j;
-				$(displayid).text(oJeopardy_round1[allCategories[i]][j-1]['value']);
+				$(displayid).text(oJeopardy_questions["oJeopardy_round1"][allCategories[i]][j-1]['value']);
 			}
 		}
 		   
@@ -207,6 +293,7 @@ function initRoundTwo(){
          spinRound = 1;
          gameRound = 2;
          
+		 displayQuestions();
 		 // remove class
 		 $('#questionBoard').find('p').removeClass('hide');
 		 
@@ -216,7 +303,7 @@ function initRoundTwo(){
 			for(var j = 1; j <= 5; j++){
 				var displayid =  "#" + allCategories[i].toLowerCase() + "_" + j;
 				$(displayid).removeClass('hide');
-				$(displayid).text(oJeopardy_round2[allCategories[i]][j-1]['value']);
+				$(displayid).text(oJeopardy_questions["oJeopardy_round2"][allCategories[i]][j-1]['value']);
 			}
 		}
 		 
@@ -226,7 +313,32 @@ function initRoundTwo(){
 		 }         
 		 console.log("The content of the availableCategories is " + availableCategories);
           // set current player
-           currentPlayer = player1;  
+           currentPlayer = players[0];  
+}
+
+function displayQuestions(){
+	console.log("Executed line 300");	
+	 var questions;
+	 if (gameRound === 1){
+		 questions = oJeopardy_questions["oJeopardy_round1"];
+	 }else if(gameRound === 2){
+		  questions = oJeopardy_questions["oJeopardy_round2"];
+	 }
+	 
+	 var categories = ["category1_questions", "category2_questions", "category3_questions","category4_questions", "category5_questions", "category6_questions"]; 
+	 var pos = 0;
+	 $.each(questions, function(key, value){
+	     $("#"+ categories[pos]).children("p").text(key);  
+        	 
+      var questionCount = 0;
+	   var questions = ["question1", "question2", "question3", "question4", "question5"];	     
+		$.each(value, function(key1, value1){
+		      $("#"+ categories[pos]).find('p[name=' + questions[questionCount] +']').text(value1["value"]);  	 
+			questionCount++;
+		 });
+	 
+	    pos++; 
+	 }); 
 }
 
 function announceWinner(){
@@ -268,19 +380,20 @@ function announceWinner(){
 function fetchQuestion(questionCategory){
   var source;
   if (gameRound === 1){
-	  source = oJeopardy_round1;
+	  source = oJeopardy_questions["oJeopardy_round1"];
   } else {
-	  source = oJeopardy_round2;
+	  source = oJeopardy_questions["oJeopardy_round2"];
   }
     var displayid;
-    var pos = availableCategories[questionCategory] + 1;
-    displayid =  "#" + questionCategory.toLowerCase() + "_" + pos;
-    console.log("execute line 255");
-    console.log("the displayid is " + displayid);
-    $(displayid).addClass('hide');
+	var catNum = allCategories.indexOf(questionCategory) + 1;
+    var pos = Number(availableCategories[questionCategory]);
+	console.log("pos is:" + pos);
+	var j = pos + 1;
+    displayid =  "#category" + catNum + "_questions" ;
+	var targetEl = 'p[name=question' + j + ']';
+    $(displayid).find(targetEl).text(" ");
     var question;
-  
-  question = source[questionCategory][availableCategories[questionCategory]];
+    question = source[questionCategory][availableCategories[questionCategory]]
 
 if(availableCategories[questionCategory] < source[questionCategory].length -1){
 	availableCategories[questionCategory]++;
@@ -289,11 +402,39 @@ if(availableCategories[questionCategory] < source[questionCategory].length -1){
 } else {
 	delete availableCategories[questionCategory];
 }
-   console.log(question["question"]);
   return question;
 }
 
 
+// use this function to display ans fetch questions
+function displayFetchAnswerQuestion(){
+	
+	var btnHtml = "";
+	$('#availableQCategories').html(btnHtml); // to clear the content in the Modal2.
+	
+    for(var key in availableCategories){
+		btnHtml += '<button id=' + 'question_' + key + ' type="button" class="btn btn-default qCategoryBtn">' + key + '</button>';
+	}
+	
+	$('#availableQCategories').html(btnHtml); // load in new content;
+	$('#myModal2').modal('show');
+	
+    selectQuestion();	
+	
+}
+
+//Use the following function to select a question
+
+function selectQuestion(){
+	$('.qCategoryBtn').click(function(){
+	   var questionCategory;
+	    questionCategory = $(this).attr('id').split("_")[1];
+		console.log('execute line 328');
+		console.log("question category is: " + questionCategory);
+	    $('#myModal2').modal('hide');
+	   answerQuestion(fetchQuestion(questionCategory));	
+	});	
+}
 // use this function to invoke the function answer process.
 
     // ---------------- This function to be modified 
@@ -302,14 +443,12 @@ function answerQuestion(question){
       loadContent(question); 
        $('#myModal').modal('show');
 	   
-     /* setTimeout(function(){
-        $('#myModal').modal('show');
-    
+      setTimeout(function(){    
         setTimer(question);
-      }, 200);     */
+      }, 200);     
 
    $('#correct-answer').click(function(){
-       //clearInterval(intervalId);
+       clearInterval(intervalId);
       showAnswer(question); 
    });
    
@@ -327,6 +466,145 @@ function answerQuestion(question){
 	   $('#myModal').modal('hide');
       
 	});
+}
+
+function playRound(choice){
+   // generate a random number between 0 and 11 (both ends inclusive).
+   checkStatus();
+   var luckyNum;
+   // future the spin of the wheel will be added here.   
+	    switch(choice){
+		    case 'Category 1':
+			case 'Category 2':
+			case 'Category 3':
+			case 'Category 4':
+			case 'Category 5':
+			case 'Category 6':
+			        luckyNum = Number(choice.split(" ")[1]) - 1;
+		            console.log("The question category number is: " + allCategories[luckyNum]);
+					if (availableCategories.hasOwnProperty(allCategories[luckyNum])){
+					  console.log("The availability of question category: " + Object.keys(availableCategories));
+					  var question = fetchQuestion(allCategories[luckyNum]);
+					  answerQuestion(question);
+                      spinRound++ ;	
+				  
+					 // checkStatus();
+				  } else {
+					  if(availableCategories.length == 0 || spinRound == 50){
+						// checkStatus(); 
+						console.log("line 306 executed");
+					  }else {
+						  spinRound++;
+                          						  
+						  alert("Questions in this category have all been answered! Spin wheel again!");
+					  } 
+				  }
+				updateGameboard();
+			    break;
+			case 'Lose Turn': // lose turn
+		          alert(currentPlayer.name + " , you lose this turn!");
+				  console.log("you lose this turn");
+				  if(currentPlayer.freeTurn > 0){ // here need a window to confirm it
+					  if (confirm("would like to use a free turn?")){
+						   if(availableCategories.length == 0 || spinRound == 50){
+						// checkStatus(); 
+					  }else {
+						  spinRound++;
+                          currentPlayer.freeTurn--;
+                          updateGameboard();
+                          alert("Spin again!");						  
+						  $('#spinWheel').off().unbind().click(function(){
+						       spinWheel();
+						  });
+					  }
+					  } 
+				  } else {
+					   spinRound++;
+					   updateGameboard();
+				  }
+				 
+			    break; 
+		    case 'Free Turn': // free turn
+			   alert(currentPlayer.name + " , you got a free turn!");
+		        currentPlayer.freeTurn++;
+				spinRound++;
+				 updateGameboard();
+				// checkStatus();
+			    break;
+			case 'Bankrupt': //bankrupt 
+			   alert(currentPlayer.name + " , you bankrupt!")
+		        if(gameRound === 1){
+					if(currentPlayer.roundOneScore){
+					currentPlayer.roundOneScore = 0;
+					alert("your scorce is " + currentPlayer.roundOneScore);
+					} else {
+						alert("Your debt stays!");
+					}
+					
+				} else if (gameRound == 2){
+					if(currentPlayer.roundOneScore){
+					currentPlayer.roundTwoScore = 0;
+					alert("your scorce is " + currentPlayer.roundOneScore);
+					} else {
+						alert("Your debt stays!");
+					}
+				}
+				spinRound++;
+				updateGameboard();
+			    break;
+            case 'P Choice':  //player's choice
+		           // create a model and list the question caterogies in availableCategories
+				// if a question is selected, run the answerQuestion(question) function
+				alert("player's choice!");
+				console.log(availableCategories);
+				
+				if(!$.isEmptyObject(availableCategories)){
+					displayFetchAnswerQuestion();
+					 
+				} else {
+					alert('All questions are answered!');
+				}
+				
+				spinRound++;
+				updateGameboard();
+			//	checkStatus();
+				// $('#spinWheel').removeClass("disabled");
+			    break;
+			case 'O Choice': // Opponents Choice
+		        // create a model and list the question caterogies in availableCategories
+                // if a question is selected, run the answerQuestion(question) function
+				alert("Opponent's choice!");
+				console.log("Opponent's's choice!");
+				
+				if(!$.isEmptyObject(availableCategories)){
+					var question = displayFetchAnswerQuestion();
+					  
+				} else {
+					alert('All questions are answered!');
+				}
+				
+				spinRound++;
+				updateGameboard();
+				checkStatus();
+			//	$('#spinWheel').removeClass("disabled");
+			    break; 
+            case 'Spin Again': // Spin again
+			    alert("You can spin a second time... good luck!");
+				console.log("spin again!");
+				//$('#spinWheel').removeClass("disabled");
+		        if(availableCategories.length == 0 || spinRound == 50){
+						 //checkStatus(); 
+					  } else {
+						  spinRound++;
+                          $('#currentSpin').text(spinRound);
+                          updateGameboard();						  
+						 $('#spinWheel').off().unbind().click(function(){
+							spinWheel(); 
+						 }); 
+			    }
+			//	checkStatus();
+				break;	            
+        }
 }
 
 function spinWheel(){
@@ -417,7 +695,15 @@ function spinWheel(){
 		           // create a model and list the question caterogies in availableCategories
 				// if a question is selected, run the answerQuestion(question) function
 				alert("player's choice!");
-				console.log("Player's choice!");
+				console.log(availableCategories);
+				
+				if(!$.isEmptyObject(availableCategories)){
+					displayFetchAnswerQuestion();
+					 
+				} else {
+					alert('All questions are answered!');
+				}
+				
 				spinRound++;
 				updateGameboard();
 			//	checkStatus();
@@ -428,6 +714,14 @@ function spinWheel(){
                 // if a question is selected, run the answerQuestion(question) function
 				alert("Opponent's choice!");
 				console.log("Opponent's's choice!");
+				
+				if(!$.isEmptyObject(availableCategories)){
+					var question = displayFetchAnswerQuestion();
+					  
+				} else {
+					alert('All questions are answered!');
+				}
+				
 				spinRound++;
 				updateGameboard();
 				checkStatus();
@@ -443,7 +737,6 @@ function spinWheel(){
 						  spinRound++;
                           $('#currentSpin').text(spinRound);
                           updateGameboard();						  
-						  alert("click spin wheel button to play one more round"); 
 						 $('#spinWheel').off().unbind().click(function(){
 							spinWheel(); 
 						 }); 
@@ -466,103 +759,91 @@ function checkStatus(){
         } 
 }  
 
+// Use this function to update the current player 
 function nextPlayer() {
-			  // update status to continue the game
-			 // spinRound++; // update spin round
+			  var idNum = Number(currentPlayer.id.slice(-1));
 			  
-			  // update current player
-			  if(currentPlayer.id === "player1"){
-				  currentPlayer = player2;
-			  } else if(currentPlayer.id === "player2"){
-				  currentPlayer = player3;
-			  } else if(currentPlayer.id === "player3"){
-				  currentPlayer = player4;
-			  } else if(currentPlayer.id === "player4"){
-				  currentPlayer = player1;
-			  }
+			  if (idNum < players.length-1){
+				  idNum++;
+				  currentPlayer = players[idNum];
+			  }else {currentPlayer = players[0];}
               
-			  $('#currentPlayer').text(currentPlayer.name);
-			  //update availableCategories;
-			  
-			  // update contents			 
+			  $('#currentPlayer').text(currentPlayer.name);		 
 }
 
 
 // Update display in the game board
 
 function  updateGameboard(){
+   var idNum = Number(currentPlayer.id.slice(-1));
    
    if(gameRound === 1){
-	//   console.log("executed line 409!!!");
-    if(currentPlayer.id === "player1"){
-		$('#p1score').text(currentPlayer.roundOneScore);
-		$('#p1freeReturn').text(currentPlayer.freeTurn);
-		player1.roundOneScore = currentPlayer.roundOneScore;
-		player1.freeTurn = currentPlayer.freeTurn;
-	} else if(currentPlayer.id === "player2"){
-		$('#p2score').text(currentPlayer.roundOneScore);
-		$('#p2freeReturn').text(currentPlayer.freeTurn);
-		player2.roundOneScore = currentPlayer.roundOneScore;
-		player2.freeTurn = currentPlayer.freeTurn;
-	} else if(currentPlayer.id === "player3"){
-		$('#p3score').text(currentPlayer.roundOneScore);
-		$('#p3freeReturn').text(currentPlayer.freeTurn);
-		player3.roundOneScore = currentPlayer.roundOneScore;
-		player3.freeTurn = currentPlayer.freeTurn;
-	} else if(currentPlayer.id === "player4"){
-		$('#p4score').text(currentPlayer.roundOneScore);
-		$('#p4freeReturn').text(currentPlayer.freeTurn);
-		player4.roundOneScore = currentPlayer.roundOneScore;
-		player4.freeTurn = currentPlayer.freeTurn;
-	}    
+	   console.log("executed line 749!!!");
+	   //update the display in UI
+	   $('#' + currentPlayer.id + 'board').find('div[name="playerscore"]').text(currentPlayer.roundOneScore);
+	   $('#' + currentPlayer.id + 'board').find('div[name="playerFreeTurns"]').text(currentPlayer.freeTurn);
+	   
+	   // update the player's object
+	   players[idNum].roundOneScore = currentPlayer.roundOneScore;
+	   players[idNum].freeTurn = currentPlayer.freeTurn;
+	      
    } else if(gameRound === 2){
-    if(currentPlayer === player1){
-		$('#p1score').text(currentPlayer.roundTwoScore);
-		$('#p1freeReturn').text(currentPlayer.freeTurn);
-		player1.roundTwoScore = currentPlayer.roundTwoScore;
-		player1.freeTurn = currentPlayer.freeTurn;
-	} else if(currentPlayer === player2){
-		$('#p2score').text(currentPlayer.roundTwoScore);
-		$('#p2freeReturn').text(currentPlayer.freeTurn);
-		player2.roundTwoScore = currentPlayer.roundTwoScore;
-		player2.freeTurn = currentPlayer.freeTurn;
-	} else if(currentPlayer === player3){
-		$('#p3score').text(currentPlayer.roundTwoScore);
-		$('#p3freeReturn').text(currentPlayer.freeTurn);
-		player3.roundTwoScore = currentPlayer.roundTwoScore;
-		player3.freeTurn = currentPlayer.freeTurn;
-	} else if(currentPlayer === player4){
-		$('#p4score').text(currentPlayer.roundTwoScore);
-		$('#p4freeReturn').text(currentPlayer.freeTurn);
-		player4.roundTwoScore = currentPlayer.roundTwoScore;
-		player4.freeTurn = currentPlayer.freeTurn;
+    	   //update the display in UI
+	   $('#' + currentPlayer.id + 'board').find('div[name="playerscore"]').text(currentPlayer.roundTwoScore);
+	   $('#' + currentPlayer.id + 'board').find('div[name="playerFreeTurns"]').text(currentPlayer.freeTurn);
+	   
+	   // update the player's object
+	   players[idNum].roundOneScore = currentPlayer.roundTwoScore;
+	   players[idNum].freeTurn = currentPlayer.freeTurn;
 	}    
-   }
    
    //$('#spinWheel').removeClass("disabled");
    $('#currentRound').text(gameRound);
    $('#currentSpin').text(spinRound);
-  
+    
+  // resetWheel();
   
 }
 
+
+             $('#playersBoard').append('<div class ="col-md-2" id=player' + item + 'board><div name = "playername"><h4>' +
+			 players[item].name + '</h4></div><div name = "playerscore">$0</div><div name= "playerFreeTurns">0</div></div>');
+			 
+			 
 function refreshGameboard(){
 	 $('#currentRound').text(gameRound);
      $('#currentSpin').text(spinRound);
 	 $('#currentPlayer').text(currentPlayer.name);
-     $('#p1score').text(0);
-	 $('#p1freeReturn').text(0);
-     $('#p2score').text(0);
-	 $('#p2freeReturn').text(0);
-     $('#p3score').text(0);
-	 $('#p3freeReturn').text(0);
-     $('#p4score').text(0);
-	 $('#p4freeReturn').text(0);	 
+	 
+	 $('div[name=playerscore]').text("$0");
+	 $('div[name="playerFreeTurns]').text(0);	 
+}
+
+function loadFileIntoGame(callback)
+{
+    var fileToLoad = document.getElementById("fileToLoadIn").files[0];
+ 
+    var fileReader = new FileReader();
+    fileReader.onload = function(fileLoadedEvent) 
+    {
+        var textFromFileLoaded = fileLoadedEvent.target.result;
+        //document.getElementById("inputTextToSave").value = textFromFileLoaded;
+        oJeopardy_questions = JSON.parse(textFromFileLoaded);
+		console.log("The loaded file has the content: " + oJeopardy_questions);
+		
+		if (callback && typeof(callback) === "function") {
+			  callback();
+			  } 
+    };
+    fileReader.readAsText(fileToLoad, "UTF-8"); 
 }
 
 
 
-var oJeopardy_round1 = {
+
+
+
+var sampleQuestions = { "oJeopardy_round1" : {
       "HISTORY":[{"question" : "For the last 8 years of his life, Galileo was under house arrest for espousing this man's theory", "value": "$200", "answer": "Copernicus", "used": "false"},{"question": "'Built in 312 B.C. to link Rome & the South of Italy, it's still in use today'", "value": "$400", "answer": "the Appian Way", "used": "false"}, {"question": "'In 1000 Rajaraja I of the Cholas battled to take this Indian Ocean island now known for its tea'", "value": "$600", "answer": "Ceylon (or Sri Lanka)", "used": "false"},{"question": "'Karl led the first of these Marxist organizational efforts; the second one began in 1889'", "value": "$800", "answer": "the International", "used": "false"}, {"question": "'This Asian political    party was founded in 1885 with \"Indian National\" as part of its name'", "value": "$1000", "answer": "the Congress Party", "used": "false"}], 
 
       "ATHLETES":[{"question": "'No. 2: 1912 Olympian; football star at Carlisle Indian School; 6 MLB seasons with the Reds, Giants & Braves'", "value": "$200", "answer": "Jim Thorpe", "used": "false"}, {"question": "'No. 8: 30 steals for the Birmingham Barons; 2,306 steals for the Bulls'", "value": "$400", "answer": "Michael Jordan", "used": "false"}, {"question": "'No. 1: Lettered in hoops, football & lacrosse at Syracuse & if you think he couldn't act, ask his 11 \"unclean\" buddies'", "value": "$600", "answer": "Jim Brown", "used": "false"}, {"question": "'No. 10: FB/LB for Columbia U. in the 1920s; MVP for the Yankees in '27 & '36; \"Gibraltar in Cleats\"'", "value": "$800", "answer": "(Lou) Gehrig", "used": "false"}, {"question": "'No. 5: Only center to lead the NBA in assists; track scholarship to Kansas U.; marathoner; volleyballer'", "value": "$1000", "answer": "(Wilt) Chamberlain", "used": "false"}], 
@@ -574,10 +855,7 @@ var oJeopardy_round1 = {
       "TRIBUTES":[{"question": "'Signer of the Dec. of Indep., framer of the Constitution of Mass., second President of the United States'", "value": "$200", "answer": "John Adams", "used": "false"},{"question": "'\"And away we go\"'", "value": "$400", "answer": "Jackie Gleason", "used": "false"}, {"question": "'Outlaw: \"Murdered by a traitor and a coward whose name is not worthy to appear here\"'", "value": "$600", "answer": "Jesse James", "used": "false"}, {"question": "'1939 Oscar winner: \"...you are a credit to your craft, your race and to your family\"'", "value": "$800", "answer": "Hattie McDaniel (for her role in Gone with the Wind)", "used": "false"}, {"question": "'Revolutionary War hero: \"His spirit is in Vermont now\"'", "value": "$1000", "answer": "Ethan Allen", "used": "false"}], 
 	  
       "WORDS":[{"question": "'In the title of an Aesop fable, this insect shared billing with a grasshopper'", "value": "$200", "answer": "the ant", "used": "false"},{"question": "'Cows regurgitate this from the first stomach to the mouth & chew it again'", "value": "$400", "answer": "the cud", "used": "false"}, {"question": "'A small demon, or a mischievous child (who might be a little demon!)'", "value": "$600", "answer": "imp", "used": "false"}, {"question": "'In geologic time one of these, shorter than an eon, is divided into periods & subdivided into epochs'", "value": "$800", "answer": "era", "used": "false"}, {"question": "'A single layer of paper, or to perform one's craft diligently'", "value": "$1000", "answer": "ply", "used": "false"}]
-       };
-
-var oJeopardy_round2 = {
-     "HISTORY":[{"question" : "For the last 8 years of his life, Galileo was under house arrest for espousing this man's theory", "value": "$200", "answer": "Copernicus", "used": "false"},{"question": "'Built in 312 B.C. to link Rome & the South of Italy, it's still in use today'", "value": "$400", "answer": "the Appian Way", "used": "false"}, {"question": "'In 1000 Rajaraja I of the Cholas battled to take this Indian Ocean island now known for its tea'", "value": "$600", "answer": "Ceylon (or Sri Lanka)", "used": "false"},{"question": "'Karl led the first of these Marxist organizational efforts; the second one began in 1889'", "value": "$800", "answer": "the International", "used": "false"}, {"question": "'This Asian political    party was founded in 1885 with \"Indian National\" as part of its name'", "value": "$1000", "answer": "the Congress Party", "used": "false"}], 
+       } , "oJeopardy_round2" : {"HISTORY":[{"question" : "For the last 8 years of his life, Galileo was under house arrest for espousing this man's theory", "value": "$200", "answer": "Copernicus", "used": "false"},{"question": "'Built in 312 B.C. to link Rome & the South of Italy, it's still in use today'", "value": "$400", "answer": "the Appian Way", "used": "false"}, {"question": "'In 1000 Rajaraja I of the Cholas battled to take this Indian Ocean island now known for its tea'", "value": "$600", "answer": "Ceylon (or Sri Lanka)", "used": "false"},{"question": "'Karl led the first of these Marxist organizational efforts; the second one began in 1889'", "value": "$800", "answer": "the International", "used": "false"}, {"question": "'This Asian political    party was founded in 1885 with \"Indian National\" as part of its name'", "value": "$1000", "answer": "the Congress Party", "used": "false"}], 
 
       "ATHLETES":[{"question": "'No. 2: 1912 Olympian; football star at Carlisle Indian School; 6 MLB seasons with the Reds, Giants & Braves'", "value": "$200", "answer": "Jim Thorpe", "used": "false"}, {"question": "'No. 8: 30 steals for the Birmingham Barons; 2,306 steals for the Bulls'", "value": "$400", "answer": "Michael Jordan", "used": "false"}, {"question": "'No. 1: Lettered in hoops, football & lacrosse at Syracuse & if you think he couldn't act, ask his 11 \"unclean\" buddies'", "value": "$600", "answer": "Jim Brown", "used": "false"}, {"question": "'No. 10: FB/LB for Columbia U. in the 1920s; MVP for the Yankees in '27 & '36; \"Gibraltar in Cleats\"'", "value": "$800", "answer": "(Lou) Gehrig", "used": "false"}, {"question": "'No. 5: Only center to lead the NBA in assists; track scholarship to Kansas U.; marathoner; volleyballer'", "value": "$1000", "answer": "(Wilt) Chamberlain", "used": "false"}], 
 	  
@@ -588,7 +866,7 @@ var oJeopardy_round2 = {
       "TRIBUTES":[{"question": "'Signer of the Dec. of Indep., framer of the Constitution of Mass., second President of the United States'", "value": "$200", "answer": "John Adams", "used": "false"},{"question": "'\"And away we go\"'", "value": "$400", "answer": "Jackie Gleason", "used": "false"}, {"question": "'Outlaw: \"Murdered by a traitor and a coward whose name is not worthy to appear here\"'", "value": "$600", "answer": "Jesse James", "used": "false"}, {"question": "'1939 Oscar winner: \"...you are a credit to your craft, your race and to your family\"'", "value": "$800", "answer": "Hattie McDaniel (for her role in Gone with the Wind)", "used": "false"}, {"question": "'Revolutionary War hero: \"His spirit is in Vermont now\"'", "value": "$1000", "answer": "Ethan Allen", "used": "false"}], 
 	  
       "WORDS":[{"question": "'In the title of an Aesop fable, this insect shared billing with a grasshopper'", "value": "$200", "answer": "the ant", "used": "false"},{"question": "'Cows regurgitate this from the first stomach to the mouth & chew it again'", "value": "$400", "answer": "the cud", "used": "false"}, {"question": "'A small demon, or a mischievous child (who might be a little demon!)'", "value": "$600", "answer": "imp", "used": "false"}, {"question": "'In geologic time one of these, shorter than an eon, is divided into periods & subdivided into epochs'", "value": "$800", "answer": "era", "used": "false"}, {"question": "'A single layer of paper, or to perform one's craft diligently'", "value": "$1000", "answer": "ply", "used": "false"}]
-       };
+       }};
 
-
-
+	   
+	   
