@@ -1,6 +1,5 @@
 // global variables to be shred by functions and to be updated throughthour the game
 var category;  // category of the problem
-//var num;     // to record doolar amout for the question to be answered
 var intervalId; // will be used to record time
 var gameRound; // to record round of games
 var allCategories = [];
@@ -15,18 +14,14 @@ var players = [];
 $(document).ready(function(){
 	$("#myModal4").modal('show'); 
     
-	
 	$('#toEditQuestionFile').click(function(){
 		$('#myModal4').modal('hide');
 		openQuestionEditor();
 	});
-	
-	
-	
+		
 	$('#loadAquestionFile').click(function(){
 		configModal4();
 	});
-	
 	
 	$('#freeTrial').click(function(){
 		$('#myModal4').modal('hide');
@@ -35,6 +30,7 @@ $(document).ready(function(){
 	});
 });
 
+// Use this modal to config a start popup window
 function configModal4(){
 	$("#myModal4").find(".modal-title").text("Upload a question file");
 	
@@ -49,7 +45,7 @@ function configModal4(){
 	});	
 }
 
-
+// use this function to start a game
 function startGame(){
 	 gameRound = 1;
 	 displayQuestions();
@@ -60,10 +56,11 @@ function startGame(){
 	 });
 }
 
+// Use this function to input number of players
 function enterNumOfPlayers(callback){
 	 numOfPlayers = prompt("Please enter number of players (1 to 4)");
 	 
-	  if ( isNaN(numOfPlayers) || Number(numOfPlayers) < 0 || Number(numOfPlayers) > 4){
+	  if ( isNaN(numOfPlayers) || Number(numOfPlayers) <= 0 || Number(numOfPlayers) > 4){
 		  alert("You entered a wrong number");
 		  enterNumOfPlayers();
 	  }
@@ -72,8 +69,8 @@ function enterNumOfPlayers(callback){
 			  } 
 }
 	 
+// use this function to create players
 function createPlayers(callback){
-	console.log("line 55 executed");
 	for(var i = 0; i < numOfPlayers; i++){
 		players.push(new Player("player" + i, "player" + i));
 	}
@@ -83,6 +80,7 @@ function createPlayers(callback){
     }  
 }
 
+// use this modal /popup window to load players' name
 function configureModal3(){
 	for(var i = players.length-1; i >=0; i--){
 		var j = i + 1;
@@ -91,6 +89,7 @@ function configureModal3(){
 	}		
 }
 
+// use this function to add plyers
 function addPlayerNames(callback){
 	    configureModal3();
 		$('#myModal3').modal('show');
@@ -120,7 +119,7 @@ function loadContent(question){
   $(".modal-title").text("Jeopardy Question");
   $("#modalText").text("");
   $('#timer').text(""); 
-  $("#modalText").text(question["question"]);
+  $("#modalText").html(question["question"].replace('/\n/g','<br />'));
 }
 
 
@@ -129,7 +128,7 @@ function  showAnswer(question){
    //clearInterval(intervalId);
    $('#timer').text(""); 
    $(".modal-title").text("Corect Answer is...");  
-   $("#modalText").text(question["answer"]);
+   $("#modalText").html(question["answer"].replace('/\n/g', '<br />'));
    $('#correct-answer').addClass("hide");
     setTimeout(function(){
       $('#addPoints').removeClass("hide");
@@ -804,10 +803,6 @@ function  updateGameboard(){
   // resetWheel();
   
 }
-
-
-             $('#playersBoard').append('<div class ="col-md-2" id=player' + item + 'board><div name = "playername"><h4>' +
-			 players[item].name + '</h4></div><div name = "playerscore">$0</div><div name= "playerFreeTurns">0</div></div>');
 			 
 			 
 function refreshGameboard(){
