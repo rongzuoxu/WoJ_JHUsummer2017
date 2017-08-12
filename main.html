@@ -19,7 +19,7 @@
 <header class="container">
 <div class= 'row text-center'>
 <h1>The Jeopardy Game</h1>
-<h2>The theme of the game will be displayed here</h2>
+
 </div>
 </header>
 <section class="jumbotron">
@@ -131,12 +131,12 @@
 <!--This part dispalys game status-->
 <div class="container text-center gameStatusBoard">
 
-<div class="row">
+<div class="row statusTitle">
 <div class ="col-md-4 col-md-offset-1">Current Game Round</div>
 <div class ="col-md-3">Current Spin</div>
 <div class ="col-md-3">Current Player</div>
 </div>
-<div class="row">
+<div class="row statusTitle">
 
 <div class="col-md-4 col-md-offset-1"><p id="currentRound">1</p></div>
 <div class="col-md-3"><p id="currentSpin">1</p></div>
@@ -382,7 +382,7 @@
                     }
                     
                     // Disable the spin button so can't click again while wheel is spinning.
-                    document.getElementById('spin_button').src       = "spin_off.png";
+                    document.getElementById('spin_button').src       = "spin_on.png";
                     document.getElementById('spin_button').className = "";
                     
                     // Begin the spin animation by calling startAnimation on the wheel object.
@@ -398,7 +398,8 @@
             // Function for reset button.
             // -------------------------------------------------------
             function resetWheel()
-            {
+            {   
+			     checkStatus();
                 theWheel.stopAnimation(false);  // Stop the animation, false as param so does not call callback function.
                 theWheel.rotationAngle = 0;     // Re-set the wheel angle to 0 degrees.
                 theWheel.draw();                // Call draw to render changes to the wheel.

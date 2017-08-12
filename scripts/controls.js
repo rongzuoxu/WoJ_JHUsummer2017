@@ -12,6 +12,7 @@ var players = [];
 
 // start the game
 $(document).ready(function(){
+	
 	$("#myModal4").modal('show'); 
     
 	$('#toEditQuestionFile').click(function(){
@@ -119,43 +120,45 @@ function loadContent(question){
   $(".modal-title").text("Jeopardy Question");
   $("#modalText").text("");
   $('#timer').text(""); 
-  $("#modalText").html(question["question"].replace('/\n/g','<br />'));
+  var qlist = question["question"].split('\n');
+  $.each(qlist, function(index, value){
+	  $("#modalText").append('<p>' + value + '</p>');	  
+  });
 }
-
 
 // Show the correct answer 
 function  showAnswer(question){
-   //clearInterval(intervalId);
    $('#timer').text(""); 
+   $("#modalText").text('');
    $(".modal-title").text("Corect Answer is...");  
-   $("#modalText").html(question["answer"].replace('/\n/g', '<br />'));
+     var qlist = question["answer"].split('\n');
+     $.each(qlist, function(index, value){
+	     $("#modalText").append('<p>' + value + '</p>');
+     });
    $('#correct-answer').addClass("hide");
     setTimeout(function(){
       $('#addPoints').removeClass("hide");
       $('#noPoints').removeClass("hide");   
       }, 100); 
-	  console.log('execute line 38');
 } 
  
 // add points to the players
 function winPoints(question){
-    // console.log( "Total wealth is: " + $('#player1').text().replace("$", ""));
      var newScore;
-    // console.log('execute line 45');
+	 var questionValue;
+	
 	 if (gameRound === 1){
-		console.log( "Current score: " + currentPlayer.roundOneScore);
-		console.log( "Earned points: " + Number(question["value"].replace("$", "")));
-	    newScore = currentPlayer.roundOneScore + Number(question["value"].replace("$", ""));
-        currentPlayer.roundOneScore = newScore;
-        console.log( currentPlayer.name + " new total score: " + currentPlayer.roundOneScore);
-       	   
+		questionValue =  Number(question["value"].replace("$", ""));
+	    newScore = currentPlayer.roundOneScore + questionValue;
+        currentPlayer.roundOneScore = newScore;  
+        
 	 } else if (gameRound === 2){
-	    newScore = Number(currentPlayer.roundTwoScore) + Number(question["value"].replace("$", ""));
-     //   console.log( currentPlayer.name + " : " + newScore);
+		questionValue =  Number(question["value"].replace("$", ""))*2;
+	    newScore = Number(currentPlayer.roundTwoScore) + questionValue;
         currentPlayer.roundTwoScore = newScore;		
 	 }
     
-     $("#modalText").html(currentPlayer.name  + ", you win " + question["value"] + "!<br>" + "Your total wealth is $" + newScore + " !!");
+     $("#modalText").html(currentPlayer.name  + ", you win $" + questionValue + "!<br>" + "Your total wealth is $" + newScore + " !!");		
      $('#addPoints').addClass("hide");
      $('#noPoints').addClass("hide");
      $('#closeBtn').removeClass("hide"); 
@@ -193,9 +196,7 @@ function losePoints(question){
 	 } else {
 		  currentPlayer.roundTwoScore = newScore; 
 	 }
-	 
-    
-    // $('#player1').text("$" + newScore); 
+	     
      $('#addPoints').addClass("hide");
      $('#noPoints').addClass("hide");
      $('#closeBtn').removeClass("hide"); 
@@ -232,20 +233,17 @@ function playGame(){
 		alert('Click the "Spin Wheel" button to start a round');
 		
 	$('#spinWheel').off().unbind().on( 'click', function(){
-	 // $('#spinWheel').addClass("hide");
 	  playRound();
 	});
 	
 	$('#nextPlayer').click(function(){
 	 nextPlayer();
 	});
-
 }
 
 function playRound(){
        console.log( "Current player is: " + currentPlayer.name);
 	  spinWheel();
-	 // checkStatus();
 }
 
 function Player(name, id) {
@@ -253,6 +251,7 @@ function Player(name, id) {
 	this.id = id;
 	this.roundOneScore = 0;
 	this.roundTwoScore = 0;
+	this.totalScore = 0;
 	this.freeTurn = 0;
 }
 
@@ -287,7 +286,8 @@ function initRoundOne(){
 }
 
 function initRoundTwo(){
-
+          
+		  $('.modal').modal('hide');
          // set game status  
          spinRound = 1;
          gameRound = 2;
@@ -297,7 +297,11 @@ function initRoundTwo(){
 		 $('#questionBoard').find('p').removeClass('hide');
 		 
         // refresh money for each siaplay
-
+        $.each(players, function(key, value){
+			players[key].freeTurn = 0;
+		});
+		allCategories = Object.keys(oJeopardy_questions["oJeopardy_round2"]);
+		
         for(var i in allCategories){
 			for(var j = 1; j <= 5; j++){
 				var displayid =  "#" + allCategories[i].toLowerCase() + "_" + j;
@@ -305,18 +309,19 @@ function initRoundTwo(){
 				$(displayid).text(oJeopardy_questions["oJeopardy_round2"][allCategories[i]][j-1]['value']);
 			}
 		}
-		 
-          // set available question categories 
+		availableCategories = {};
+        // set available question categories 
          for(var item in allCategories){
 			 availableCategories[allCategories[item]] = 0;
 		 }         
 		 console.log("The content of the availableCategories is " + availableCategories);
           // set current player
-           currentPlayer = players[0];  
+           currentPlayer = players[0]; 
+           confirm('Round two is ready for play!');		   
 }
 
+// display questions on the gameboard
 function displayQuestions(){
-	console.log("Executed line 300");	
 	 var questions;
 	 if (gameRound === 1){
 		 questions = oJeopardy_questions["oJeopardy_round1"];
@@ -340,34 +345,33 @@ function displayQuestions(){
 	 }); 
 }
 
+// Use this function to detect and announce the winner
 function announceWinner(){
-        var p1tscore = player1.roundOneScore + player1.roundTwoScore;//calculate player1 total score
-		var p2tscore = player2.roundOneScore + player2.roundTwoScore;//calculate player2 total score
-		var p3tscore = player3.roundOneScore + player3.roundTwoScore;//calculate player3 total score
-		var p4tscore = player4.roundOneScore + player4.roundTwoScore;//calculate player4 total score
+
+        var highestScore = Number.MIN_SAFE_INTEGER;
+
+        $.each(players, function(key, value){
+			players[key].totalScore = players[key].roundOneScore + players[key].roundTwoScore;
+			if (players[key].totalScore > highestScore){
+				highestScore = players[key].totalScore; 
+			}
+		});
 		
-		var highest = Math.max(p1tscore, p2tscore, p3tscore, p4tscore);
 		var winner = [];
+
+		 $.each(players, function(key, value){
+			 if (players[key].totalScore == highestScore){
+				winner.push(players[key].name) 
+			 }
+		 });
 		
-		if(highest === p1tscore) {
-			winner.push(player1.name);
-		}  
-		if(highest === p2tscore) {
-			winner.push(player2.name);
-		} 
-		if(highest === p1tscore) {
-			winner.push(player3.name);
-		} 
-		if(highest === p1tscore) {
-			winner.push(player4.name);
-		}
+		// display winner(s)!
 		 if (winner.length === 1){
 			 alert(winner + " is the winner!" );
 		 } else {
 			 alert(winner + " are the winners!" ); 
 		 }
-		 alert(winner + " is (are) the winner!" );
-		 
+ 
 	    if(confirm("Play this game again?")){
 			 playGame();
 		 }else{
@@ -396,8 +400,6 @@ function fetchQuestion(questionCategory){
 
 if(availableCategories[questionCategory] < source[questionCategory].length -1){
 	availableCategories[questionCategory]++;
-	// code could be added to disable the display of question besing selected.
-	console.log("available question is: " + availableCategories[questionCategory] );
 } else {
 	delete availableCategories[questionCategory];
 }
@@ -407,7 +409,6 @@ if(availableCategories[questionCategory] < source[questionCategory].length -1){
 
 // use this function to display ans fetch questions
 function displayFetchAnswerQuestion(){
-	
 	var btnHtml = "";
 	$('#availableQCategories').html(btnHtml); // to clear the content in the Modal2.
 	
@@ -428,15 +429,12 @@ function selectQuestion(){
 	$('.qCategoryBtn').click(function(){
 	   var questionCategory;
 	    questionCategory = $(this).attr('id').split("_")[1];
-		console.log('execute line 328');
-		console.log("question category is: " + questionCategory);
 	    $('#myModal2').modal('hide');
 	   answerQuestion(fetchQuestion(questionCategory));	
 	});	
 }
 // use this function to invoke the function answer process.
 
-    // ---------------- This function to be modified 
 function answerQuestion(question){
      
       loadContent(question); 
@@ -444,7 +442,7 @@ function answerQuestion(question){
 	   
       setTimeout(function(){    
         setTimer(question);
-      }, 200);     
+      }, 100);     
 
    $('#correct-answer').click(function(){
        clearInterval(intervalId);
@@ -506,7 +504,6 @@ function playRound(choice){
 				  if(currentPlayer.freeTurn > 0){ // here need a window to confirm it
 					  if (confirm("would like to use a free turn?")){
 						   if(availableCategories.length == 0 || spinRound == 50){
-						// checkStatus(); 
 					  }else {
 						  spinRound++;
                           currentPlayer.freeTurn--;
@@ -533,7 +530,7 @@ function playRound(choice){
 			case 'Bankrupt': //bankrupt 
 			   alert(currentPlayer.name + " , you bankrupt!")
 		        if(gameRound === 1){
-					if(currentPlayer.roundOneScore){
+					if(currentPlayer.roundOneScore >= 0){
 					currentPlayer.roundOneScore = 0;
 					alert("your scorce is " + currentPlayer.roundOneScore);
 					} else {
@@ -541,9 +538,9 @@ function playRound(choice){
 					}
 					
 				} else if (gameRound == 2){
-					if(currentPlayer.roundOneScore){
+					if(currentPlayer.roundTwoScore >= 0){
 					currentPlayer.roundTwoScore = 0;
-					alert("your scorce is " + currentPlayer.roundOneScore);
+					alert("your scorce is " + currentPlayer.roundTwoScore);
 					} else {
 						alert("Your debt stays!");
 					}
@@ -555,8 +552,7 @@ function playRound(choice){
 		           // create a model and list the question caterogies in availableCategories
 				// if a question is selected, run the answerQuestion(question) function
 				alert("player's choice!");
-				console.log(availableCategories);
-				
+
 				if(!$.isEmptyObject(availableCategories)){
 					displayFetchAnswerQuestion();
 					 
@@ -566,8 +562,7 @@ function playRound(choice){
 				
 				spinRound++;
 				updateGameboard();
-			//	checkStatus();
-				// $('#spinWheel').removeClass("disabled");
+
 			    break;
 			case 'O Choice': // Opponents Choice
 		        // create a model and list the question caterogies in availableCategories
@@ -622,22 +617,21 @@ function spinWheel(){
 			case 5:
 		            console.log("The question category number is: " + allCategories[luckyNum]);
 					if (availableCategories.hasOwnProperty(allCategories[luckyNum])){
-					  console.log("The lucky number is between 0 and 5: " + luckyNum);
-					  console.log("The availability of question category: " + Object.keys(availableCategories));
 					  var question = fetchQuestion(allCategories[luckyNum]);
 					  answerQuestion(question);
                       spinRound++ ;					  
-					 // checkStatus();
-				  } else {
-					  if(availableCategories.length == 0 || spinRound == 50){
-						// checkStatus(); 
+				  } else if (!availableCategories.hasOwnProperty(allCategories[luckyNum]) && !jQuery.isEmptyObject(availableCategories)){
+					   alert("player's choice!");
+					   displayFetchAnswerQuestion();
+				  } 
+				  else if(jQuery.isEmptyObject(availableCategories) || spinRound > 50){
 						console.log("line 306 executed");
-					  }else {
+					  } else {
 						  spinRound++;
                           updateGameboard();						  
 						  spinWheel();
 					  } 
-				  }
+				  
 			    break;
 			case 6: // lose turn
 		          alert(currentPlayer.name + " , you lose this turn!");
@@ -714,7 +708,7 @@ function spinWheel(){
 				alert("Opponent's choice!");
 				console.log("Opponent's's choice!");
 				
-				if(!$.isEmptyObject(availableCategories)){
+				if(!jQuery.isEmptyObject(availableCategories)){
 					var question = displayFetchAnswerQuestion();
 					  
 				} else {
@@ -749,10 +743,10 @@ function spinWheel(){
 function checkStatus(){
            updateGameboard();
 		   // check is round 1 is over
-          if (gameRound === 1 && (availableCategories.length === 0 || spinRound >= 50)){
+          if (gameRound === 1 && (jQuery.isEmptyObject(availableCategories) || spinRound > 15)){
 			  initRoundTwo();
 			  refreshGameboard();
-		  } else if (gameRound === 2 && (availableCategories.length === 0 || spinRound >= 50)){    // check if game is over
+		  } else if (gameRound === 2 && (jQuery.isEmptyObject(availableCategories) || spinRound > 15)){    // check if game is over
 			 //if game is over, printout the winner
              announceWinner(); 
         } 
@@ -760,6 +754,7 @@ function checkStatus(){
 
 // Use this function to update the current player 
 function nextPlayer() {
+	          checkStatus();
 			  var idNum = Number(currentPlayer.id.slice(-1));
 			  
 			  if (idNum < players.length-1){

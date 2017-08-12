@@ -53,9 +53,9 @@ function loadRoundQuestions(holder, place){
         $.each(["questionOne", "questionTwo", "questionThree", "questionFour", "questionFive"], function(index, value){
             var question = $(categoryquestions).find('div[name=' + value + ']');
                 categoryContents.push({
-	        	"question": $(question).find('input[name=question]').val(),
-		        "answer": $(question).find('input[name=answer]').val(),
-		        "value": $(question).find('input[name=value]').val()
+	        	"question": $(question).find('textarea[name=question]').val(),
+		        "answer": $(question).find('textarea[name=answer]').val(),
+		        "value": $(question).find('select[class=selectpicker]').val()
 	        });
         });
 		holder[categoryName] = categoryContents;
@@ -104,7 +104,9 @@ function  injectContent(textFromFileLoaded)
       var pageContent = JSON.parse(textFromFileLoaded);
        $('#questionRoundOne').find("input").val("");
 	   $('#questionRoundTwo').find("input").val("");
-      // $("textarea").val("");
+	   $('#questionRoundOne').find("textarea").val("");
+	   $('#questionRoundTwo').find("textarea").val("");
+
 	  var rounds = ['#questionRoundOne', '#questionRoundTwo'];
 	   $.each(["oJeopardy_round1" ,"oJeopardy_round2" ], function(index, value){ 
 	   var pos = 0;
@@ -122,7 +124,8 @@ function  injectContent(textFromFileLoaded)
 	   $.each(value1, function(key2, value2){
 		   var question = $(categoryquestions).find('div[name=' + questions[questionCount] +']');
 		   $.each(value2, function(key3, value3){
-			   $(question).find('input[name=' + key3 + ']').val(value3);
+			   $(question).find('textarea[name=' + key3 + ']').val(value3);
+			   $(question).find('select[name=' + key3 + ']').val(value3);
 		   });
 		   questionCount++;
 	   });

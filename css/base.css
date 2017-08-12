@@ -8,6 +8,11 @@
    background-color:lightblue;
 }
 
+h1 {
+    padding: 20px;
+	
+}
+
 .jumbotron .questions p {
    border: 1px solid black;
    border-radius: 10px;
@@ -26,7 +31,12 @@
 
 .scoreboard {
  border: 2px solid black;
- margin-bottom: 20px;
+ margin: 20px 0px 20px 0px;
+}
+
+.statusTitle {
+    font-size: 16px;
+	margin-top: 10px;
 }
 
 .scoreboard  .row{
@@ -34,9 +44,7 @@
    background-color: #00FFFF;
 }
 
-#player1 {
-    color: #8B008B; 
-}
+
 
 #timer {
    color: red;
