@@ -103,7 +103,7 @@ function addPlayerNames(callback){
 			}
 			$('#myModal3').modal('hide');
 		
-		// display players name
+		// display players name , score and free turns
 		for(var item in players){
              $('#playersBoard').append('<div class ="col-md-2" id=player' + item + 'board><div name = "playername"><h4>' +
 			 players[item].name + '</h4></div><div name = "playerscore">$0</div><div name= "playerFreeTurns">0</div></div>');
@@ -147,12 +147,12 @@ function winPoints(question){
      var newScore;
 	 var questionValue;
 	
-	 if (gameRound === 1){
+	 if (gameRound == 1){
 		questionValue =  Number(question["value"].replace("$", ""));
 	    newScore = currentPlayer.roundOneScore + questionValue;
         currentPlayer.roundOneScore = newScore;  
         
-	 } else if (gameRound === 2){
+	 } else if (gameRound == 2){
 		questionValue =  Number(question["value"].replace("$", ""))*2;
 	    newScore = Number(currentPlayer.roundTwoScore) + questionValue;
         currentPlayer.roundTwoScore = newScore;		
@@ -286,7 +286,7 @@ function initRoundOne(){
 }
 
 function initRoundTwo(){
-          
+          // hide all modals
 		  $('.modal').modal('hide');
          // set game status  
          spinRound = 1;
@@ -314,10 +314,18 @@ function initRoundTwo(){
          for(var item in allCategories){
 			 availableCategories[allCategories[item]] = 0;
 		 }         
-		 console.log("The content of the availableCategories is " + availableCategories);
+		 
           // set current player
            currentPlayer = players[0]; 
-           confirm('Round two is ready for play!');		   
+           confirm('Round two is ready for play!');		  
+           
+		   // update scoreboard
+		    $('#playersBoard').html('<div class ="col-md-2 col-md-offset-1"><div><h6> &nbsp; </h6></div><div>Scores</div><div>Free Turns</div></div>');
+			
+		   for(var item in players){
+             $('#playersBoard').append('<div class ="col-md-2" id=player' + item + 'board><div name = "playername"><h4>' +
+			 players[item].name + '</h4></div><div name = "playerscore">$0</div><div name= "playerFreeTurns">0</div></div>');
+		}		   
 }
 
 // display questions on the gameboard
@@ -743,10 +751,10 @@ function spinWheel(){
 function checkStatus(){
            updateGameboard();
 		   // check is round 1 is over
-          if (gameRound === 1 && (jQuery.isEmptyObject(availableCategories) || spinRound > 15)){
+          if (gameRound === 1 && (jQuery.isEmptyObject(availableCategories) || spinRound > 5)){
 			  initRoundTwo();
 			  refreshGameboard();
-		  } else if (gameRound === 2 && (jQuery.isEmptyObject(availableCategories) || spinRound > 15)){    // check if game is over
+		  } else if (gameRound === 2 && (jQuery.isEmptyObject(availableCategories) || spinRound > 5)){    // check if game is over
 			 //if game is over, printout the winner
              announceWinner(); 
         } 
@@ -762,7 +770,8 @@ function nextPlayer() {
 				  currentPlayer = players[idNum];
 			  }else {currentPlayer = players[0];}
               
-			  $('#currentPlayer').text(currentPlayer.name);		 
+			  $('#currentPlayer').text(currentPlayer.name);	
+              resetWheel();			  
 }
 
 
@@ -772,9 +781,8 @@ function  updateGameboard(){
    var idNum = Number(currentPlayer.id.slice(-1));
    
    if(gameRound === 1){
-	   console.log("executed line 749!!!");
 	   //update the display in UI
-	   $('#' + currentPlayer.id + 'board').find('div[name="playerscore"]').text(currentPlayer.roundOneScore);
+	   $('#' + currentPlayer.id + 'board').find('div[name="playerscore"]').text('$' + currentPlayer.roundOneScore);
 	   $('#' + currentPlayer.id + 'board').find('div[name="playerFreeTurns"]').text(currentPlayer.freeTurn);
 	   
 	   // update the player's object
@@ -783,7 +791,7 @@ function  updateGameboard(){
 	      
    } else if(gameRound === 2){
     	   //update the display in UI
-	   $('#' + currentPlayer.id + 'board').find('div[name="playerscore"]').text(currentPlayer.roundTwoScore);
+	   $('#' + currentPlayer.id + 'board').find('div[name="playerscore"]').text('$' + currentPlayer.roundTwoScore);
 	   $('#' + currentPlayer.id + 'board').find('div[name="playerFreeTurns"]').text(currentPlayer.freeTurn);
 	   
 	   // update the player's object
