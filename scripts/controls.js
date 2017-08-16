@@ -761,10 +761,10 @@ function spinWheel(){
 function checkStatus(){
            updateGameboard();
 		   // check is round 1 is over
-          if (gameRound === 1 && (jQuery.isEmptyObject(availableCategories) || spinRound > 5)){
+          if (gameRound === 1 && (jQuery.isEmptyObject(availableCategories) || spinRound > 15)){
 			  initRoundTwo();
 			  refreshGameboard();
-		  } else if (gameRound === 2 && (jQuery.isEmptyObject(availableCategories) || spinRound > 5)){    // check if game is over
+		  } else if (gameRound === 2 && (jQuery.isEmptyObject(availableCategories) || spinRound > 15)){    // check if game is over
 			 //if game is over, printout the winner
              announceWinner(); 
         } 
