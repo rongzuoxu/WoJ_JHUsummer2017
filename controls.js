@@ -116,8 +116,8 @@ function addPlayerNames(callback){
 }
 
 // Load the jeopardy question to Modal
-function loadContent(question){
-  $(".modal-title").text("Jeopardy Question");
+function loadContent(question, questionCategory){
+  $(".modal-title").text("Jeopardy Question - " + questionCategory);
   $("#modalText").text("");
   $('#timer').text(""); 
   var qlist = question["question"].split('\n');
@@ -170,6 +170,7 @@ function losePoints(question){
     // console.log( "Total wealth is: " + $('#player1').text().replace("$", ""));
      var newScore;
      var currentScore;
+	 var points = 0;
      console.log('execute line 72');
 	 if (gameRound == 1){
 		 currentScore = Number(currentPlayer.roundOneScore);
@@ -183,12 +184,22 @@ function losePoints(question){
             newScore = currentScore;
             $("#modalText").html( currentPlayer.name + ", you don't lose points!<br>" + "Your total wealth is $" + newScore + " !!");			
 		 } else{
-			 newScore = currentScore - Number(question["value"].replace("$", "")); 
-			  $("#modalText").html( currentPlayer.name + ", you lose " + question["value"] + "!<br>" + "Your total wealth is $" + newScore + " !!");
+			  if (gameRound == 1){
+				  points = Number(question["value"].replace("$", "")); 
+			  } else{
+				  points = Number(question["value"].replace("$", "")) * 2; 
+			  }
+			  newScore = currentScore - points; 
+			  $("#modalText").html( currentPlayer.name + ", you lose $" + points + "!<br>" + "Your total wealth is $" + newScore + " !!");
 		 } 
 	 }else {
-     newScore = currentScore - Number(question["value"].replace("$", ""));
-	  $("#modalText").html( currentPlayer.name + ", you lose " + question["value"] + "!<br>" + "Your total wealth is $" + newScore + " !!");
+              if (gameRound == 1){
+				  points = Number(question["value"].replace("$", "")); 
+			  } else{
+				  points = Number(question["value"].replace("$", "")) * 2; 
+			  }
+			  newScore = currentScore - points; 
+			  $("#modalText").html( currentPlayer.name + ", you lose $" + points + "!<br>" + "Your total wealth is $" + newScore + " !!");
 	 }
 	 
 	 if (gameRound == 1){
@@ -200,7 +211,6 @@ function losePoints(question){
      $('#addPoints').addClass("hide");
      $('#noPoints').addClass("hide");
      $('#closeBtn').removeClass("hide"); 
-	 console.log('execute line 104');
 }
 
 //restore the modal to initial condition
@@ -375,13 +385,13 @@ function announceWinner(){
 		
 		// display winner(s)!
 		 if (winner.length === 1){
-			 alert(winner + " is the winner!" );
+			 alert("Game over!\n" + winner + " is the winner!" );
 		 } else {
-			 alert(winner + " are the winners!" ); 
+			 alert("Game over!\n" + winner + " are the winners!" ); 
 		 }
  
 	    if(confirm("Play this game again?")){
-			 playGame();
+			 window.location.reload();
 		 }else{
 			 window.close();
 			}
@@ -398,7 +408,6 @@ function fetchQuestion(questionCategory){
     var displayid;
 	var catNum = allCategories.indexOf(questionCategory) + 1;
     var pos = Number(availableCategories[questionCategory]);
-	console.log("pos is:" + pos);
 	var j = pos + 1;
     displayid =  "#category" + catNum + "_questions" ;
 	var targetEl = 'p[name=question' + j + ']';
@@ -415,7 +424,7 @@ if(availableCategories[questionCategory] < source[questionCategory].length -1){
 }
 
 
-// use this function to display ans fetch questions
+// use this function to display and fetch questions
 function displayFetchAnswerQuestion(){
 	var btnHtml = "";
 	$('#availableQCategories').html(btnHtml); // to clear the content in the Modal2.
@@ -438,14 +447,14 @@ function selectQuestion(){
 	   var questionCategory;
 	    questionCategory = $(this).attr('id').split("_")[1];
 	    $('#myModal2').modal('hide');
-	   answerQuestion(fetchQuestion(questionCategory));	
+	   answerQuestion(fetchQuestion(questionCategory), questionCategory);	
 	});	
 }
 // use this function to invoke the function answer process.
 
-function answerQuestion(question){
+function answerQuestion(question, questionCategory){
      
-      loadContent(question); 
+      loadContent(question, questionCategory); 
        $('#myModal').modal('show');
 	   
       setTimeout(function(){    
@@ -490,12 +499,12 @@ function playRound(choice){
 					if (availableCategories.hasOwnProperty(allCategories[luckyNum])){
 					  console.log("The availability of question category: " + Object.keys(availableCategories));
 					  var question = fetchQuestion(allCategories[luckyNum]);
-					  answerQuestion(question);
+					  answerQuestion(question, allCategories[luckyNum]);
                       spinRound++ ;	
 				  
 					 // checkStatus();
 				  } else {
-					  if(availableCategories.length == 0 || spinRound == 50){
+					  if(availableCategories.length == 0 || spinRound >= 50){
 						// checkStatus(); 
 						console.log("line 306 executed");
 					  }else {
@@ -511,7 +520,7 @@ function playRound(choice){
 				  console.log("you lose this turn");
 				  if(currentPlayer.freeTurn > 0){ // here need a window to confirm it
 					  if (confirm("would like to use a free turn?")){
-						   if(availableCategories.length == 0 || spinRound == 50){
+						   if(availableCategories.length == 0 || spinRound >= 50){
 					  }else {
 						  spinRound++;
                           currentPlayer.freeTurn--;
@@ -536,7 +545,7 @@ function playRound(choice){
 				// checkStatus();
 			    break;
 			case 'Bankrupt': //bankrupt 
-			   alert(currentPlayer.name + " , you bankrupt!")
+			   alert(currentPlayer.name + " , you are bankrupt!")
 		        if(gameRound === 1){
 					if(currentPlayer.roundOneScore >= 0){
 					currentPlayer.roundOneScore = 0;
@@ -591,11 +600,11 @@ function playRound(choice){
 			//	$('#spinWheel').removeClass("disabled");
 			    break; 
             case 'Spin Again': // Spin again
-			    alert("You can spin a second time... good luck!");
-				console.log("spin again!");
-				//$('#spinWheel').removeClass("disabled");
-		        if(availableCategories.length == 0 || spinRound == 50){
-						 //checkStatus(); 
+			    if (confirm("You can spin a second time... good luck!")){
+					resetWheel();
+				};
+
+		        if(availableCategories.length == 0 || spinRound >= 50){
 					  } else {
 						  spinRound++;
                           $('#currentSpin').text(spinRound);
@@ -604,7 +613,7 @@ function playRound(choice){
 							spinWheel(); 
 						 }); 
 			    }
-			//	checkStatus();
+
 				break;	            
         }
 }
@@ -626,14 +635,13 @@ function spinWheel(){
 		            console.log("The question category number is: " + allCategories[luckyNum]);
 					if (availableCategories.hasOwnProperty(allCategories[luckyNum])){
 					  var question = fetchQuestion(allCategories[luckyNum]);
-					  answerQuestion(question);
+					  answerQuestion(question, allCategories[luckyNum]);
                       spinRound++ ;					  
 				  } else if (!availableCategories.hasOwnProperty(allCategories[luckyNum]) && !jQuery.isEmptyObject(availableCategories)){
-					   alert("player's choice!");
+					   alert("Switch to player's choice!");
 					   displayFetchAnswerQuestion();
 				  } 
 				  else if(jQuery.isEmptyObject(availableCategories) || spinRound > 50){
-						console.log("line 306 executed");
 					  } else {
 						  spinRound++;
                           updateGameboard();						  
@@ -729,8 +737,10 @@ function spinWheel(){
 			//	$('#spinWheel').removeClass("disabled");
 			    break; 
             case 11: // Spin again
-			    alert("You can spin a second time... good luck!");
-				console.log("spin again!");
+			    if(confirm("You can spin a second time... good luck!")){
+					resetWheel();
+				};
+
 				//$('#spinWheel').removeClass("disabled");
 		        if(availableCategories.length == 0 || spinRound == 50){
 						 //checkStatus(); 
@@ -769,8 +779,11 @@ function nextPlayer() {
 				  idNum++;
 				  currentPlayer = players[idNum];
 			  }else {currentPlayer = players[0];}
-              
-			  $('#currentPlayer').text(currentPlayer.name);	
+                $('#currentPlayer').text("");
+			   $('#currentPlayer').show(500, 'linear', function(){
+			        $('#currentPlayer').text(currentPlayer.name);	
+			    });	
+			
               resetWheel();			  
 }
 
