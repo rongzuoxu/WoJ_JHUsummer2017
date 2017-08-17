@@ -157,7 +157,7 @@ function winPoints(question){
 	    newScore = Number(currentPlayer.roundTwoScore) + questionValue;
         currentPlayer.roundTwoScore = newScore;		
 	 }
-    
+     $(".modal-title").text(""); 
      $("#modalText").html(currentPlayer.name  + ", you win $" + questionValue + "!<br>" + "Your total wealth is $" + newScore + " !!");		
      $('#addPoints').addClass("hide");
      $('#noPoints').addClass("hide");
@@ -182,6 +182,7 @@ function losePoints(question){
 		 if(confirm( currentPlayer.name + ", will you use free return to avoid points deduction?")){
 			currentPlayer.freeTurn--;
             newScore = currentScore;
+			$(".modal-title").text(""); 
             $("#modalText").html( currentPlayer.name + ", you don't lose points!<br>" + "Your total wealth is $" + newScore + " !!");			
 		 } else{
 			  if (gameRound == 1){
@@ -190,6 +191,7 @@ function losePoints(question){
 				  points = Number(question["value"].replace("$", "")) * 2; 
 			  }
 			  newScore = currentScore - points; 
+			  $(".modal-title").text(""); 
 			  $("#modalText").html( currentPlayer.name + ", you lose $" + points + "!<br>" + "Your total wealth is $" + newScore + " !!");
 		 } 
 	 }else {
@@ -199,6 +201,7 @@ function losePoints(question){
 				  points = Number(question["value"].replace("$", "")) * 2; 
 			  }
 			  newScore = currentScore - points; 
+			  $(".modal-title").text(""); 
 			  $("#modalText").html( currentPlayer.name + ", you lose $" + points + "!<br>" + "Your total wealth is $" + newScore + " !!");
 	 }
 	 
